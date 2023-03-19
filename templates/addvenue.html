@@ -1,0 +1,77 @@
+{% extends 'baseadmin.html' %}
+
+{% block content %} 
+{% if name %}
+  <!-- <h1>Hello</h1> -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Place</th>
+        <th scope="col">Location</th>
+        <th scope="col">Capacity</th> 
+        <th scope="col">Date Added</th> 
+      </tr>
+    </thead>
+    <tbody>
+      {% for venue in venues %}
+      <tr>
+        <th scope="row">1</th>
+        <td>{{ venue.id }}</td>
+        <td>{{ venue.name }}</td>
+        <td>{{ venue.place }}</td>
+        <td>{{ venue.location }}</td>
+        <td>{{ venue.Capacity }}</td>
+        <td>{{ venue.date_added }}vilva1208vilv</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+ 
+{% else %}
+  <h1>ADD A VENUE:</h1>
+<div class="card" style="text-align: center; width: 400px;">
+  <div class="card-body">
+  
+  <div class="shadow p-3 mb-5 bg-body rounded">
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        {{ form.name.label(class="form-label") }}
+        {{ form.name(class="form-control")}}<!-- String input field name-->
+      </br></br>
+        {{ form.place.label(class="form-label") }}
+        {{ form.place(class="form-control")}}<!-- String input field name-->
+      </br></br>
+        {{ form.location.label(class="form-label") }}
+        {{ form.location(class="form-control")}}<!-- String input field name-->
+      </br></br>
+        {{ form.capacity.label(class="form-label") }}
+        {{ form.capacity(class="form-control")}}<!-- String input field name-->
+      </br></br>
+      {{ form.submit(class="btn btn-dark") }}
+   <!-- <div class="mb-3">
+    <label type="text" class="form-label">Add The Name Of The Venue:</label>
+    <input type="text" class="form-control" id="namevenue" >
+    </div> -->
+   <!-- <div class="mb-3">
+    <label type="text" class="form-label">Add The Place Of The Venue:</label>
+    <input type="text" class="form-control" id="placevenue" >
+  </div> -->
+   <!-- <div class="mb-3">
+    <label type="text" class="form-label">Add The Location Of The Venue:</label>
+    <input type="text" class="form-control" id="locationvenue">
+  </div>
+   <div class="mb-3">
+    <label type="text" class="form-label">Add The Capacity Of The Venue:</label>
+    <input type="text" class="form-control" id="capacityvenue">
+  </div>-->
+  <!-- <button type="submit" class="btn btn-primary">Submit</button>  -->
+
+</form>
+  </div>
+</div>
+
+{% endif %}
+
+{% endblock %}
