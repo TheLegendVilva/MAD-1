@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash,session,redirect,flash
+from flask import Flask, render_template, request, flash,session,redirect,flash, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_wtf import FlaskForm
@@ -11,16 +11,21 @@ from flask_login import UserMixin, login_user, LoginManager, login_required, log
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'MAD1_PROJECT'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///venueDB.db'
+
+
+
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 conn = sqlite3.connect('admin.db', check_same_thread=False)
 cursor = conn.cursor()
 
-class AdminForm(FlaskForm):
+class AdminForm(FlaskForm, UserMixin):
     admin_username = StringField('username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField("Login")
+ 
+
 
 class Venue(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
@@ -36,6 +41,29 @@ class venueForms(FlaskForm):
     location = StringField('Add The Location Of The Venue:', validators=[DataRequired()])
     capacity = IntegerField('Add The Capacity Of The Venue:', validators=[DataRequired()])
     submit = SubmitField("Save")
+
+#Flask_login stuff
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'adminLogin'
+
+@login_manager.user_loader
+def load_user():
+    query = 'select password from adminLogin'
+    res = cursor.execute(query).fetchone()[0]
+    return res
+
+# @app.route('/login',methods = ['GET','POST'])
+# def login():
+#     form = AdminForm()
+#     return render_template('admin_login.html',form=form)
+
+@app.route('/admin-dashboard',methods = ['GET','POST'])
+@login_required
+def dashboard():
+    form = AdminForm()
+    return render_template('admin_dashboard.html',form=form)
+
 
 #Login page of Admin
 @app.route('/admin-login', methods=['GET', 'POST'])
@@ -56,10 +84,15 @@ def adminLogin():
     admin_password=''
     return render_template('admin_login.html', form=form, name=admin_username)
 
+#create logout page
+@app.route('/admin-logout', methods=['GET','POST'])
+@login_required
+def logout():
+    logout_user()
+    flash('You have logged out successfully!!')
+    return redirect(url_for('adminLogin'))
 
-@app.route('/admin-dashboard',methods=['GET','POST'])
-def adminDashboard():
-    return render_template('adminDashboard.html')
+
 
 @app.route("/addvenue",methods=['GET','POST'])
 def addvenue():
@@ -83,7 +116,3 @@ def addvenue():
         venues = Venue.query.all()
         flash('Venue added successfully!!')
     return render_template('addvenue.html',form = form, venues= venues,name=name)
-
-@app.route("/admin-dashboard")
-def admindashboard():
-    return render_template('new.html')
