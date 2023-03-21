@@ -108,11 +108,54 @@ def addvenue():
             db.session.add(venue)
             db.session.commit()
             venues = Venue.query.order_by(Venue.date_added)
+            flash('Venue added successfully!!')
             return render_template('addvenue.html',form = form, venues= venues,name=name)
         form.name.data=''
         form.place.data=''
         form.location.data=''
         form.capacity.data=''
-        venues = Venue.query.all()
-        flash('Venue added successfully!!')
+        venues = Venue.query.order_by(Venue.date_added)
+        
     return render_template('addvenue.html',form = form, venues= venues,name=name)
+
+@app.route('/updatevenue/<int:id>',methods=['GET','POST'])
+# @login_required
+def updatevenue(id):
+    form = venueForms()
+    venue_to_update = Venue.query.get_or_404(id)
+    if(request.method == 'POST'):
+        venue_to_update.name = request.form['name']
+        venue_to_update.place = request.form['place']
+        venue_to_update.location = request.form['location']
+        venue_to_update.Capacity = request.form['capacity']
+        try:
+            db.session.commit()
+            return render_template("updatevenue.html",form=form,venue_to_update=venue_to_update)
+        except:
+            flash('Error')
+            return render_template("updatevenue.html",form=form,venue_to_update=venue_to_update)
+    else:
+        return render_template("updatevenue.html",form=form,venue_to_update=venue_to_update)
+
+@app.route('/delete/<int:id>',methods=['GET','POST'])
+def deletevenue(id):
+    venue_to_delete = Venue.query.get_or_404(id)
+    form = venueForms()
+    name=None
+    try:
+        db.session.delete(venue_to_delete)
+        db.session.commit()
+        flash('Venue deleted')
+        try:
+            venues = Venue.query.order_by(Venue.date_added)
+            venue= Venue.query.order_by(Venue.date_added).first()
+            return render_template('addvenue.html',form = form, venues= venues,name=venue.name)
+        except:
+            return redirect('/addvenue')
+    except:
+        flash('Venue not deleted')
+        venues = Venue.query.order_by(Venue.date_added)
+        return render_template('addvenue.html',form = form, venues= venues,name=name)
+
+
+
