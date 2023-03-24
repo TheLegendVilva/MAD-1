@@ -3,31 +3,31 @@
 {% block content %}
 
 
-<center>Admin|Login</center>
+<center>User|Login</center>
 {% for message in get_flashed_messages() %}
 
 <div class="container">
-<div class="alert alert-danger" role="alert" aria-label="Close">
+<div class="alert alert-success alert-dismissible fade show" role="alert">
   <strong>{{ message }}</strong>
 </div>
 </div>
 {% endfor %}
 {% if name %}
-    <!-- <h1>Hello {{ name }} -->
-        <!-- <h1>hello</h1>     -->
     hello {{ name }}
 {% else %}
 <div class="shadow p-3 mb-5 bg-body rounded">
     <form method="POST">
         {{ form.hidden_tag() }}
-        {{ form.admin_username.label(class="form-label") }}
-        {{ form.admin_username(class="form-control")}}<!-- String input field name-->
+        {{ form.user_username.label(class="form-label") }}
+        {{ form.user_username(class="form-control")}}<!-- String input field name-->
      </br></br>
         {{ form.password.label(class="form-label") }}
         {{ form.password(class="form-control")}}
     </br></br>
         {{ form.submit(class="btn btn-dark") }}<!-- Submit button -->
-     </form>
+    </br>
+    <a href="{{ url_for('register_user') }}">
+    <button type="button" class="btn btn-success">Register</button></a>
 </div>
 {% endif %}  
 

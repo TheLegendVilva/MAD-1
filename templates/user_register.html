@@ -1,0 +1,28 @@
+{% extends 'baseadmin.html' %}
+
+{% block content %} 
+{% if name %}
+  <h1>Hello</h1>
+ 
+{% else %}
+<Center>
+<h1>Register:</h1>
+<div class="card" style="text-align: center; width: 400px;">
+  <div class="card-body">
+  
+  <div class="shadow p-3 mb-5 bg-body rounded">
+    <form action="/register_user/" method="POST">
+        {{ form.hidden_tag() }}
+        {{ form.user_username.label(class="form-label") }}
+        {{ form.user_username(class="form-control")}}<!-- String input field name-->
+      </br></br>
+        {{ form.password.label(class="form-label") }}
+        {{ form.password(class="form-control")}}<!-- String input field name-->
+        {{ form.register(class="btn btn-dark") }}
+</form>
+  </div>
+</div>
+</center>
+{% endif %}
+
+{% endblock %}

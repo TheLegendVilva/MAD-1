@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, flash,session,redirect,flash, url_for
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import select
 from flask_migrate import Migrate
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, StringField, PasswordField, BooleanField, ValidationError, IntegerField
@@ -21,11 +22,16 @@ conn = sqlite3.connect('admin.db', check_same_thread=False)
 cursor = conn.cursor()
 
 class AdminForm(FlaskForm, UserMixin):
-    admin_username = StringField('username', validators=[DataRequired()])
+    admin_username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField("Login")
  
-
+class UserForm(FlaskForm, UserMixin):
+    user_username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField("Login")
+    register = SubmitField("Register")
+# 
 
 class Venue(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
@@ -34,6 +40,12 @@ class Venue(db.Model):
 	location = db.Column(db.String(255), nullable=False)
 	Capacity = db.Column(db.Integer, nullable=False)
 	date_added = db.Column(db.DateTime, default=datetime.utcnow())
+        
+class Users(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_name = db.Column(db.String(255),nullable=False)
+    password = db.Column(db.String(8),nullable = False)
+    date_added = db.Column(db.DateTime, default=datetime.utcnow())
         
 class venueForms(FlaskForm):
     name = StringField('Add The Name Of The Venue:', validators=[DataRequired()])
@@ -45,7 +57,9 @@ class venueForms(FlaskForm):
 #Flask_login stuff
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'adminLogin'
+login_manager.login_view= 'adminLogin'
+
+
 
 @login_manager.user_loader
 def load_user():
@@ -94,7 +108,8 @@ def logout():
 
 
 
-@app.route("/addvenue",methods=['GET','POST'])
+@app.route("/add-venue",methods=['GET','POST'])
+@login_required
 def addvenue():
     form=venueForms()
     name=None
@@ -119,7 +134,7 @@ def addvenue():
     return render_template('addvenue.html',form = form, venues= venues,name=name)
 
 @app.route('/updatevenue/<int:id>',methods=['GET','POST'])
-# @login_required
+@login_required
 def updatevenue(id):
     form = venueForms()
     venue_to_update = Venue.query.get_or_404(id)
@@ -157,5 +172,39 @@ def deletevenue(id):
         venues = Venue.query.order_by(Venue.date_added)
         return render_template('addvenue.html',form = form, venues= venues,name=name)
 
+# User page
+@app.route('/user-login/',methods=['POST','GET'])
+def user_login():
+    form = UserForm()
+    user_username = None
+    user_password=None
+    if (form.validate_on_submit()):
+        user_username = form.user_username.data
+        user_password = form.password.data
+        # db_password = cursor.execute("select password from adminLogin where username = '"+admin_username+"'").fetchone()
+        # db_password = select(user_password).where(Users.c.password == user_password)
+        if(user_password == '123'):
+            flash('Login Successful')
+            return render_template('user_login.html', form=form, name=user_username)
+        else:
+            flash('Login Unsuccessful')
+    admin_username=''
+    admin_password=''
+    return render_template('user_login.html', form=form, name=user_username)
 
-
+@app.route('/register_user/',methods=['GET','POST'])
+def register_user():
+    form=UserForm()
+    user_username=None
+    if(form.validate_on_submit()):
+        user_username = form.user_username.data 
+        password = form.password.data
+        new_user = Users(user_name=user_username,password=password)
+        db.session.add(new_user)
+        db.session.commit()
+        users = Users.query.order_by(Users.date_added)
+        flash('Userregistered successfully!!')
+        return render_template('user_register.html',form = form, users= users,name=user_username)
+    form.user_username.data=''
+    users = Users.query.order_by(Users.date_added)
+    return render_template('user_register.html',form = form, users= users,name=user_username)
