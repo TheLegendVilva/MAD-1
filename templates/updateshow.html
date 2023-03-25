@@ -1,0 +1,63 @@
+{% extends 'baseadmin.html' %}
+
+{% block content %} 
+{% if name %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">venue id</th>
+        <th scope="col">Show Name</th>
+        <th scope="col">Rating</th>
+        <th scope="col">tags</th> 
+        <th scope="col">ticket_price</th> 
+      </tr>
+    </thead>
+    <tbody>
+      {% for show in shows %}
+      <tr>
+        <td>{{ show.id }}</td>
+        <td>{{ show.venue_id }}</td>
+        <td>{{ show.name }}</td>
+        <td>{{ show.rating }}</td>
+        <td>{{ show.show_timing }}</td>
+        <td>{{ show.tags }}</td>
+        <td>{{ show.ticket_price }}</td>
+        <td><a href="{{ url_for('updateshow',id=show.id) }}"><button type="button" class="btn btn-info">Edit</button></a></td>
+        <td><a href="{{ url_for('deleteshow',id=show.id) }}"><button type="button" class="btn btn-danger">Delete</button></a></td>
+      </tr> 
+      {% endfor %}
+    </tbody>
+  </table>
+ 
+{% else %}
+  <h1>Update Show:</h1>
+<div class="card" style="text-align: center; width: 400px;">
+  <div class="card-body">
+  
+  <div class="shadow p-3 mb-5 bg-body rounded">
+    <form action="{{ url_for('updateshow',id=show_to_update.id) }}" method="POST">
+        {{ form.hidden_tag() }}
+        {{ form.show_name.label(class="form-label") }}
+        {{ form.show_name(class="form-control")}}<!-- String input field name-->
+      </br></br>
+        {{ form.rating.label(class="form-label") }}
+        {{ form.rating(class="form-control")}}
+      </br></br>
+        {{ form.tags.label(class="form-label") }}
+        {{ form.tags(class="form-control")}}
+      </br></br>
+        {{ form.timing.label(class="form-label") }}
+        {{ form.timing(class="form-control")}}
+      </br></br>
+        {{ form.ticket_price.label(class="form-label") }}
+        {{ form.ticket_price(class="form-control")}}
+    </br></br>
+        {{ form.submit(class="btn btn-dark") }}
+</form>
+  </div>
+</div>
+
+{% endif %}
+
+{% endblock %}

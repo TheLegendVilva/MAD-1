@@ -14,11 +14,12 @@
     <thead>
       <tr>
         <th scope="col">#</th>
-        <th scope="col">Name</th>
-        <th scope="col">Place</th>
-        <th scope="col">Location</th>
-        <th scope="col">Capacity</th> 
-        <th scope="col">Date Added</th> 
+        <th scope="col">venue id</th>
+        <th scope="col">Show Name</th>
+        <th scope="col">rating</th>
+        <th scope="col">timing</th>
+        <th scope="col">tags</th> 
+        <th scope="col">ticket_price</th> 
       </tr>
     </thead>
     <tbody>
@@ -32,6 +33,7 @@
         <td>{{ venue.date_added }}</td>
         <td><a href="{{ url_for('updatevenue',id=venue.id) }}"><button type="button" class="btn btn-info">Edit</button></a></td>
         <td><a href="{{ url_for('deletevenue',id=venue.id) }}"><button type="button" class="btn btn-danger">Delete</button></a></td>
+        <td><a href="{{ url_for('addshow',id=venue.id) }}"><button type="button" class="btn btn-success">Add Show</button></a></td>
       </tr>
       {% endfor %}
     </tbody>

@@ -2,7 +2,6 @@
 
 {% block content %} 
 {% if name %}
-  <!-- <h1>Hello</h1> -->
   <table class="table">
     <thead>
       <tr>
@@ -23,8 +22,8 @@
         <td>{{ venue.location }}</td>
         <td>{{ venue.Capacity }}</td>
         <td>{{ venue.date_added }}</td>
-        <td><a href="{{ url_for('updatevenue') }}"><button type="button" class="btn btn-info">Edit</button></a></td>
-        <td><!--<a href="{{ url_for('deletevenue',id=venue.id) }}"></a>--><button type="button" class="btn btn-danger">Delete</button></td>
+        <td><a href="{{ url_for('updatevenue',id=venue.id) }}"><button type="button" class="btn btn-info">Edit</button></a></td>
+        <td><a href="{{ url_for('deletevenue',id=venue.id) }}"><button type="button" class="btn btn-danger">Delete</button></a></td>
       </tr> 
       {% endfor %}
     </tbody>
@@ -34,9 +33,9 @@
   <h1>Update venue:</h1>
 <div class="card" style="text-align: center; width: 400px;">
   <div class="card-body">
-  
   <div class="shadow p-3 mb-5 bg-body rounded">
-    <form action="/update/{{ venue_to_update.id }}" method="POST">
+    <!-- <form action="{{ url_for('updatevenue',id=venue_to_update.id) }}" method="POST"> -->
+    <form action="{{ url_for('updatevenue',id=venue_to_update.id) }}" method="POST">
         {{ form.hidden_tag() }}
         {{ form.name.label(class="form-label") }}
         {{ form.name(class="form-control", value=venue_to_update.name)}}<!-- String input field name-->
@@ -54,7 +53,5 @@
 </form>
   </div>
 </div>
-
 {% endif %}
-
 {% endblock %}

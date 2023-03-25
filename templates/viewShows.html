@@ -1,0 +1,39 @@
+{% extends 'baseadmin.html' %}
+
+{% block content %} 
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>{{message}}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">venue id</th>
+        <th scope="col">Show Name</th>
+        <th scope="col">rating</th>
+        <th scope="col">timing</th>
+        <th scope="col">tags</th> 
+        <th scope="col">ticket_price</th> 
+      </tr>
+    </thead>
+    <tbody>
+      {% for show in shows %}
+      <tr>
+        <td>{{ show.id }}</td>
+        <td>{{ show.venue_id }}</td>
+        <td>{{ show.name }}</td>
+        <td>{{ show.rating }}</td>
+        <td>{{ show.show_timing }}</td>
+        <td>{{ show.tags }}</td>
+        <td>{{ show.ticket_price }}</td>
+        <td><a href="{{ url_for('updateshow',id=show.id) }}"><button type="button" class="btn btn-info">Edit</button></a></td>
+        <td><a href="{{ url_for('deleteshow',id=show.id) }}"><button type="button" class="btn btn-danger">Delete</button></a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+ 
+{% endblock %}
