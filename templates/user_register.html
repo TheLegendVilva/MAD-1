@@ -1,10 +1,6 @@
 {% extends 'baseadmin.html' %}
 
 {% block content %} 
-{% if name %}
-  <h1>Hello</h1>
- 
-{% else %}
 <Center>
 <h1>Register:</h1>
 <div class="card" style="text-align: center; width: 400px;">
@@ -18,11 +14,9 @@
       </br></br>
         {{ form.password.label(class="form-label") }}
         {{ form.password(class="form-control")}}<!-- String input field name-->
-        {{ form.register(class="btn btn-dark") }}
+        {{ form.submit(class="btn btn-dark") }}
 </form>
   </div>
 </div>
 </center>
-{% endif %}
-
 {% endblock %}

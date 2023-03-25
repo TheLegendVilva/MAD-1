@@ -1,15 +1,15 @@
-{% extends 'baseadmin.html' %}
+{% extends 'baseuser.html' %}
 
 {% block content %}
-
 
 <center>User|Login</center>
 {% for message in get_flashed_messages() %}
 
 <div class="container">
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-  <strong>{{ message }}</strong>
-</div>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>{{message}}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 </div>
 {% endfor %}
 {% if name %}
@@ -25,9 +25,9 @@
         {{ form.password(class="form-control")}}
     </br></br>
         {{ form.submit(class="btn btn-dark") }}<!-- Submit button -->
-    </br>
+    </br></br>
     <a href="{{ url_for('register_user') }}">
-    <button type="button" class="btn btn-success">Register</button></a>
+    Don't have an account? Click here to register</a>
 </div>
 {% endif %}  
 

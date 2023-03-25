@@ -1,0 +1,8 @@
+for inserting admin entry open python shell and perform the following operation
+create an Admin instance 
+from main import Admin, app, db
+app.app_context().push()
+a=Admin(username='',password='')
+db.session.add(a)
+db.session.commit()
+
