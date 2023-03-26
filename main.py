@@ -298,31 +298,12 @@ def updateshow(id):
             return render_template('viewShows.html',shows=shows)
         except:
             flash('Error')
-            return render_template("updateshow.html", form=form, show_to_update=show_to_update)
+            # return render_template('dummy.html',show_to_update=show_to_update)
+            return render_template("updateshow.html", form=form, show_to_update = show_to_update)
     else:
-
+        # return render_template('dummy.html',show_to_update=show_to_update)
         return render_template("updateshow.html", form=form, show_to_update=show_to_update)
-    
-# @app.route('/deleteshow/<int:id>', methods=['GET', 'POST'])
-# def deleteshow(id):
-#     show_to_delete = Show.query.get_or_404(id)
-#     form = ShowForm()
-#     name = None
-#     try:
-#         db.session.delete(show_to_delete)
-#         db.session.commit()
-#         flash('Show deleted')
-#         try:
-#             shows = Show.query.order_by(Show.date_added)
-#             show = Show.query.order_by(Show.date_added).first()
-#             # return render_template('dummy.html')
-#             return render_template('displayAllShows.html', form=form,shows=shows, name=show.name)
-#         except:
-#             return redirect(url_for('viewshows'))
-#     except:
-#         flash('Show not deleted')
-#         shows = Show.query.order_by(Show.date_added)
-        # return render_template('displayAllShows.html', shows=shows, name=name)
+
 
 @app.route('/deleteshow/<int:id>', methods=['GET', 'POST'])
 def deleteshow(id):

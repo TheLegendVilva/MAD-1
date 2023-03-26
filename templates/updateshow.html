@@ -39,20 +39,19 @@
     <form action="{{ url_for('updateshow',id=show_to_update.id) }}" method="POST">
         {{ form.hidden_tag() }}
         {{ form.show_name.label(class="form-label") }}
-        {{ form.show_name(class="form-control")}}<!-- String input field name-->
+        {{ form.show_name(class="form-control") }}<!-- String input field name-->
       </br></br>
         {{ form.rating.label(class="form-label") }}
-        {{ form.rating(class="form-control")}}
+        {{ form.rating(class="form-control") }}
       </br></br>
         {{ form.tags.label(class="form-label") }}
         {{ form.tags(class="form-control")}}
       </br></br>
         {{ form.timing.label(class="form-label") }}
-        {{ form.timing(class="form-control")}}
+        {{ form.timing(class="form-control") }}
       </br></br>
         {{ form.ticket_price.label(class="form-label") }}
-        {{ form.ticket_price(class="form-control")}}
-    </br></br>
+        {{ form.ticket_price(class="form-control") }}
         {{ form.submit(class="btn btn-dark") }}
 </form>
   </div>

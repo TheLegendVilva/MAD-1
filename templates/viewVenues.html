@@ -7,7 +7,29 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 {% endfor %}
-  <table class="table">
+
+{% for venue in venues %}
+<div class="overflow-auto">
+<div class="card" style="width: 18rem;">
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">{{ venue.id }}</li>
+    <li class="list-group-item">{{ venue.name }}</li>
+    <li class="list-group-item">{{ venue.place }}</li>
+    <li class="list-group-item">{{ venue.location }}</li>
+    <li class="list-group-item">{{ venue.Capacity }}</li>
+    <li class="list-group-item">{{ venue.Capacity }}</li>
+    <li class="list-group-item">
+        <a href="{{ url_for('updatevenue',id=venue.id) }}" ><button type="button" class="btn btn-info" >Edit</button></a>
+    </t></t>
+        <a href="{{ url_for('addshow',id=venue.id) }}" ><button type="button" class="btn btn-success">Add Show</button></a>
+    </t></t>
+        <a href="{{ url_for('deletevenue',id=venue.id) }}"><button type="button" class="btn btn-danger">Delete</button></a>
+    </li>
+  </ul>
+</div>
+</div>
+{% endfor %}
+  <!-- <table class="table">
     <thead>
       <tr>
         <th scope="col">#</th>
@@ -17,8 +39,8 @@
         <th scope="col">Capacity</th> 
         <th scope="col">Date Added</th> 
       </tr>
-    </thead>
-    <tbody>
+    </thead> -->
+    <!-- <tbody>
       {% for venue in venues %}
       <tr>
         <td>{{ venue.id }}</td>
@@ -33,5 +55,5 @@
       </tr>
       {% endfor %}
     </tbody>
-  </table>
+  </table> -->
 {% endblock %}
