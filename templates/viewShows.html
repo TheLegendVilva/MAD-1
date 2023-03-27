@@ -17,6 +17,7 @@
         <th scope="col">timing</th>
         <th scope="col">tags</th> 
         <th scope="col">ticket_price</th> 
+        <th scope="col">available_seats</th> 
       </tr>
     </thead>
     <tbody>
@@ -29,6 +30,7 @@
         <td>{{ show.show_timing }}</td>
         <td>{{ show.tags }}</td>
         <td>{{ show.ticket_price }}</td>
+        <td>{{ show.available_seats }}</td>
         <td><a href="{{ url_for('updateshow',id=show.id) }}"><button type="button" class="btn btn-info">Edit</button></a></td>
         <td><a href="{{ url_for('deleteshow',id=show.id) }}"><button type="button" class="btn btn-danger">Delete</button></a></td>
       </tr>

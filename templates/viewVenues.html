@@ -10,17 +10,20 @@
 <!-- <link href="C:\Programming\MAD-1_Shri\static\css\style.css" rel="stylesheet" type="text/css"> -->
 <link href="{{ url_for('static', filename='css/viewVenues_style.css') }}" rel="stylesheet" type="text/css">
 
-<div class="virtical-center">
+<div class="virtical-center" style="height: 80px;">
 <div class="media-scroller snaps-inline" >
   {% for venue in venues %}
   <div class="media-element">
-     <div class="card" style="width: 18rem;">
+     <div class="card" style="width:18rem;overflow-x: scroll;height: 300px;">
+      <div class="overflow-y: scroll;">
       <ul class="list-group list-group-flush">  
         {% for show in shows %}
             {% if show.venue_id == venue.id %}
+            Show Name:
               <li class="list-group-item">{{ show.name }}</li>
             {% endif %}
         {% endfor %}
+      </div>
           <!-- <li class="list-group-item">{{ venue.name }}</li>
           <li class="list-group-item">{{ venue.place }}</li>
           <li class="list-group-item">{{ venue.location }}</li>
@@ -42,6 +45,7 @@
     </div>
   </div>
   </t></t>
+  <!-- </br></br> -->
   {% endfor %}
   
 </div>

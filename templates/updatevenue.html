@@ -31,9 +31,9 @@
  
 {% else %}
   <h1>Update venue:</h1>
-<div class="card" style="text-align: center; width: 400px;">
+<!-- <div class="card" style="text-align: center; width: 400px;">
   <div class="card-body">
-  <div class="shadow p-3 mb-5 bg-body rounded">
+  <div class="shadow p-3 mb-5 bg-body rounded"> -->
     <!-- <form action="{{ url_for('updatevenue',id=venue_to_update.id) }}" method="POST"> -->
     <form action="{{ url_for('updatevenue',id=venue_to_update.id) }}" method="POST">
         {{ form.hidden_tag() }}
@@ -50,8 +50,9 @@
         {{ form.capacity(class="form-control", value=venue_to_update.Capacity)}}<!-- String input field name-->
       </br></br>
       {{ form.submit(class="btn btn-dark") }}
+      </br>
 </form>
-  </div>
-</div>
+  <!-- </div>
+</div> -->
 {% endif %}
 {% endblock %}

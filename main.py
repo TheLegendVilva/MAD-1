@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import select
 from flask_migrate import Migrate
 from flask_wtf import FlaskForm
-from wtforms import SubmitField, StringField, PasswordField,DateTimeField, ValidationError, IntegerField
+from wtforms import SubmitField, StringField, PasswordField,DateTimeField, ValidationError, IntegerField,FloatField
 from werkzeug.security import generate_password_hash, check_password_hash
 from wtforms.validators import DataRequired, InputRequired, Length
 import sqlite3
@@ -36,10 +36,11 @@ class Show(db.Model):
     # foreign key that maps shows to venue
     venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'))
     name = db.Column(db.String(255), nullable=False)
-    rating = db.Column(db.Integer, nullable=False)
+    rating = db.Column(db.Float, nullable=False)
     tags = db.Column(db.String(255))
     show_timing = db.Column(db.DateTime)
     ticket_price = db.Column(db.Integer,nullable=False)
+    available_seats=db.Column(db.Integer,nullable=False)
     date_added = db.Column(db.DateTime, default=datetime.utcnow())
     # ven = db.relationship("Venue", back_populates="shows")
 
@@ -76,10 +77,11 @@ class AdminForm(FlaskForm, UserMixin):
 
 class ShowForm(FlaskForm):
     show_name = StringField('Show name', validators=[DataRequired()])
-    rating = IntegerField('Rating', validators=[DataRequired()])
+    rating = FloatField('Rating', validators=[DataRequired()])
     timing = DateTimeField('Date & Time',validators=[DataRequired()])
     tags = StringField('Tags')
     ticket_price = IntegerField('Ticket Price', validators=[DataRequired()])
+    available_seats = IntegerField('Available Seats:',validators=[DataRequired()])
     submit = SubmitField("Add show")
 
 
@@ -198,9 +200,7 @@ def addvenue():
         form.location.data = ''
         form.capacity.data = ''
         venues = Venue.query.order_by(Venue.date_added)
-    return render_template('addvenue.html', form=form, venues=venues, name=name)
-    # return render_template('hello.html')
-
+        return render_template('addvenue.html',form=form, venues=venues)
 
 @app.route('/updatevenue/<int:id>', methods=['POST','GET'])
 @login_required
@@ -262,7 +262,7 @@ def addshow(id):
     show_name=None
     if (form.validate_on_submit):
         show_name = form.show_name.data
-        show = Show(venue_id = id, name = show_name,rating = form.rating.data,tags = form.tags.data,show_timing = form.timing.data,ticket_price = form.ticket_price.data)
+        show = Show(venue_id = id, name = show_name,rating = form.rating.data,tags = form.tags.data,show_timing = form.timing.data,ticket_price = form.ticket_price.data,available_seats=form.available_seats.data)
         if(show_name!=None):
             db.session.add(show)
             db.session.commit()
