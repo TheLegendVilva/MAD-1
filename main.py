@@ -190,8 +190,9 @@ def addvenue():
             db.session.commit()
             venues = Venue.query.order_by(Venue.date_added)
             flash('Venue added successfully!!')
-            return render_template('viewVenues.html', venues=venues,)
-
+            shows=Show.query.order_by(Show.date_added)
+            return render_template('viewVenues.html', venues=venues,shows=shows)
+            # return render_template('dummy.html')
         form.name.data = ''
         form.place.data = ''
         form.location.data = ''
@@ -244,8 +245,8 @@ def deletevenue(id):
                 db.session.delete(show)
                 db.session.commit()
             venues = Venue.query.order_by(Venue.date_added)
-            venue = Venue.query.order_by(Venue.date_added).first()
-            return render_template('viewVenues.html', venues=venues)
+            shows = Show.query.order_by(Show.date_added)
+            return render_template('viewVenues.html',venues=venues, shows=shows)
         except:
             return redirect('/addvenue')
     except:
