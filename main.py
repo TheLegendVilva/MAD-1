@@ -59,14 +59,10 @@ class Admin(db.Model, UserMixin):
 
 
 class venueForms(FlaskForm):
-    name = StringField('Add The Name Of The Venue:',
-                       validators=[DataRequired()])
-    place = StringField('Add The Place Of The Venue:',
-                        validators=[DataRequired()])
-    location = StringField('Add The Location Of The Venue:',
-                           validators=[DataRequired()])
-    capacity = IntegerField(
-        'Add The Capacity Of The Venue:', validators=[DataRequired()])
+    name = StringField('Add The Name Of The Venue:',validators=[DataRequired()])
+    place = StringField('Add The Place Of The Venue:',validators=[DataRequired()])
+    location = StringField('Add The Location Of The Venue:',validators=[DataRequired()])
+    capacity = IntegerField('Add The Capacity Of The Venue:', validators=[DataRequired()])
     submit = SubmitField("Save")
 
 
@@ -101,16 +97,18 @@ class RegisterUserForm(FlaskForm, UserMixin):
 
 class LoginUserForm(FlaskForm, UserMixin):
     user_username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[
-                             DataRequired(), Length(min=3, max=8)])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=3, max=8)])
     submit = SubmitField("Login")
-
     def validate_username(self, username):
         existing_user_username = Users.query.filter_by(
             username=username.data).first()
         if (existing_user_username):
             raise ValidationError("This username already exists. Try another")
 
+class bookingForm(FlaskForm):
+    number_of_seats = IntegerField('Number of seats: ',validators=[DataRequired()])
+    submit=SubmitField("Confirm Booking") 
+    
 
 # Flask_login stuff
 adminlogin_manager = LoginManager()
@@ -375,7 +373,9 @@ def register_user():
 @app.route('/user-dashboard/', methods=['GET', 'POST'])
 @login_required
 def user_dashboard():
-    return render_template('user_dashboard.html')
+    venues = Venue.query.order_by(Venue.date_added)
+    shows = Show.query.order_by(Show.date_added)
+    return render_template('user_dashboard.html',venues=venues, shows=shows)
 
 
 @app.route('/user-logout/', methods=['GET', 'POST'])
@@ -383,3 +383,25 @@ def user_dashboard():
 def user_logout():
     logout_user()
     return redirect(url_for('user_login'))
+
+@app.route('/user-booking/<int:venue_id>/<int:show_id>',methods=['GET','POST'])
+@login_required
+def booking(venue_id,show_id):
+    form =bookingForm()
+    venue_id=1
+    show_id=1
+    venue = Venue.query.get_or_404(venue_id)
+    show = Show.query.get_or_404(show_id)
+    if(form.validate_on_submit() and form.number_of_seats.data <= show.available_seats):
+        # return render_template('dummy.html')
+        flash('Booking Confirmed')
+        show.available_seats = int(show.available_seats) - int(form.number_of_seats.data)
+        db.session.commit()
+        return render_template('ticket_confirmation.html',form=form, venue=venue, show=show)
+    elif(form.validate_on_submit() and show.available_seats==0):
+        flash('Show Houseful')
+        return render_template('booking_show.html',show=show,venue=venue,form=form)
+    elif(form.validate_on_submit() and show.available_seats<form.number_of_seats.data):
+        flash('Enter valid number of seats to confirm booking')
+        return render_template('booking_show.html',show=show,venue=venue,form=form)
+    return render_template('booking_show.html',show=show,venue=venue,form=form)

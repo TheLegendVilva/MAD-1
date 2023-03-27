@@ -1,0 +1,32 @@
+{% extends 'baseuser.html' %}
+
+{% block content %} 
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>{{message}}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+<h3>
+Booking Show- {{ show.name }}
+</h3 >
+</br>
+Time = {{ show.show_timing }}
+</br>
+Venue = {{ venue.name }}
+</br>
+Available Seats = {{ show.available_seats }}
+</br></br>
+Price per ticekt:{{ show.ticket_price }}
+</br></br>
+<form method="POST">
+{{ form.hidden_tag() }}
+{{ form.number_of_seats.label(class="form-label") }}
+{{ form.number_of_seats(class="form-control")}}
+</br></br>
+{{form.submit(class="btn btn-dark")}}
+
+</form>
+
+
+{% endblock %}
