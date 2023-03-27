@@ -7,28 +7,46 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 {% endfor %}
+<!-- <link href="C:\Programming\MAD-1_Shri\static\css\style.css" rel="stylesheet" type="text/css"> -->
+<link href="{{ url_for('static', filename='css/viewVenues_style.css') }}" rel="stylesheet" type="text/css">
 
-{% for venue in venues %}
-<div class="overflow-auto">
-<div class="card" style="width: 18rem;">
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item">{{ venue.id }}</li>
-    <li class="list-group-item">{{ venue.name }}</li>
-    <li class="list-group-item">{{ venue.place }}</li>
-    <li class="list-group-item">{{ venue.location }}</li>
-    <li class="list-group-item">{{ venue.Capacity }}</li>
-    <li class="list-group-item">{{ venue.Capacity }}</li>
-    <li class="list-group-item">
-        <a href="{{ url_for('updatevenue',id=venue.id) }}" ><button type="button" class="btn btn-info" >Edit</button></a>
-    </t></t>
-        <a href="{{ url_for('addshow',id=venue.id) }}" ><button type="button" class="btn btn-success">Add Show</button></a>
-    </t></t>
-        <a href="{{ url_for('deletevenue',id=venue.id) }}"><button type="button" class="btn btn-danger">Delete</button></a>
-    </li>
-  </ul>
+<div class="virtical-center">
+<div class="media-scroller snaps-inline" >
+  {% for venue in venues %}
+  <div class="media-element">
+     <div class="card" style="width: 18rem;">
+      <ul class="list-group list-group-flush">  
+        {% for show in shows %}
+            {% if show.venue_id == venue.id %}
+              <li class="list-group-item">{{ show.name }}</li>
+            {% endif %}
+        {% endfor %}
+          <!-- <li class="list-group-item">{{ venue.name }}</li>
+          <li class="list-group-item">{{ venue.place }}</li>
+          <li class="list-group-item">{{ venue.location }}</li>
+          <li class="list-group-item">{{ venue.Capacity }}</li>
+          <li class="list-group-item">{{ venue.Capacity }}</li>  -->
+        <center>
+        <a href="{{ url_for('addshow',id=venue.id) }}" >
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#123456" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+        </svg>
+        </a>
+      </center>
+      <div class="d-grid gap-2 d-md-block">
+              <a href="{{ url_for('updatevenue',id=venue.id) }}" ><button type="button" class="btn btn-info" >Edit</button></a>
+              <a href="{{ url_for('deletevenue',id=venue.id) }}"><button type="button" class="btn btn-danger float-end">Delete</button></a>  
+      </div> 
+      
+      </ul>
+    </div>
+  </div>
+  </t></t>
+  {% endfor %}
+  
 </div>
 </div>
-{% endfor %}
+
   <!-- <table class="table">
     <thead>
       <tr>

@@ -25,10 +25,10 @@ class Venue(db.Model):
     name = db.Column(db.String(255), nullable=False)
     place = db.Column(db.String(255), nullable=False)
     location = db.Column(db.String(255), nullable=False)
-    shows = db.relationship('Show', backref = 'venue')
+    shows = db.relationship('Show', backref = 'shows')
     Capacity = db.Column(db.Integer, nullable=False)
     date_added = db.Column(db.DateTime, default=datetime.utcnow())
-# name can be accessed by venue_id.name and similarly place location can be accessed by venue.location , venue.place caused by backref
+# name can be accessed by venue.name and similarly place location can be accessed by venue.location , venue.place caused by backref
 
 # A venue can have multiple shows
 class Show(db.Model):
@@ -41,7 +41,7 @@ class Show(db.Model):
     show_timing = db.Column(db.DateTime)
     ticket_price = db.Column(db.Integer,nullable=False)
     date_added = db.Column(db.DateTime, default=datetime.utcnow())
-
+    # ven = db.relationship("Venue", back_populates="shows")
 
 class Users(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -190,7 +190,7 @@ def addvenue():
             db.session.commit()
             venues = Venue.query.order_by(Venue.date_added)
             flash('Venue added successfully!!')
-            return render_template('addvenue.html', form=form, venues=venues, name=name)
+            return render_template('viewVenues.html', venues=venues,)
 
         form.name.data = ''
         form.place.data = ''
@@ -223,11 +223,14 @@ def updatevenue(id):
         return render_template("updatevenue.html", form=form, venue_to_update=venue_to_update)
 
 @app.route('/viewvenue/',methods=['GET','POST'])
+@login_required
 def viewvenue():
     venues = Venue.query.order_by(Venue.date_added)
-    return render_template('viewVenues.html',venues=venues)
+    shows = Show.query.order_by(Show.date_added)
+    return render_template('viewVenues.html',venues=venues, shows=shows)
 
 @app.route('/deletevenue/<int:id>', methods=['GET', 'POST'])
+@login_required
 def deletevenue(id):
     venue_to_delete = Venue.query.get_or_404(id)
     form = venueForms()
@@ -237,9 +240,12 @@ def deletevenue(id):
         db.session.commit()
         flash('Venue deleted')
         try:
+            for show in Show.query.filter_by(venue_id=None):
+                db.session.delete(show)
+                db.session.commit()
             venues = Venue.query.order_by(Venue.date_added)
             venue = Venue.query.order_by(Venue.date_added).first()
-            return render_template('addvenue.html', form=form, venues=venues, name=venue.name)
+            return render_template('viewVenues.html', venues=venues)
         except:
             return redirect('/addvenue')
     except:
@@ -249,6 +255,7 @@ def deletevenue(id):
 
 
 @app.route('/shows/<int:id>',methods=['POST','GET'])
+@login_required
 def addshow(id):
     form = ShowForm()
     show_name=None
@@ -270,18 +277,20 @@ def addshow(id):
     return render_template('displayAllShows.html', form=form, Shows=Shows , name=show_name)
 
 @app.route('/viewshows/',methods=['GET','POST'])
+@login_required
 def viewshows():
     shows = Show.query.order_by(Show.date_added)
     return render_template('viewShows.html',shows=shows)
 
-@app.route('/dummy')
-def dummy():
-    id=1
-    show_to_update = Show.query.get_or_404(id)
-    show_to_update.show_timing = '2007-10-29 22:30:20'
-    return render_template('dummy.html',show_to_update=show_to_update)
+# @app.route('/dummy')
+# def dummy():
+#     id=1
+#     show_to_update = Show.query.get_or_404(id)
+#     show_to_update.show_timing = '2007-10-29 22:30:20'
+#     return render_template('dummy.html',show_to_update=show_to_update)
 
 @app.route('/updateshow/<int:id>',methods=['POST','GET'])
+@login_required
 def updateshow(id):
     form = ShowForm()
     show_to_update = Show.query.get_or_404(id)
@@ -306,6 +315,7 @@ def updateshow(id):
 
 
 @app.route('/deleteshow/<int:id>', methods=['GET', 'POST'])
+@login_required
 def deleteshow(id):
     show_to_delete = Show.query.get_or_404(id)
     form = venueForms()
