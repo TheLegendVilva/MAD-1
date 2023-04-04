@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, flash, session, redirect, flash, url_for
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import select
+from sqlalchemy import create_engine,MetaData, Table
 from flask_migrate import Migrate
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, StringField, PasswordField,DateTimeField, ValidationError, IntegerField,FloatField
@@ -14,6 +14,11 @@ from flask_bcrypt import Bcrypt
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'MAD1_PROJECT'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///venueDB.db'
+engine = create_engine('sqlite:///venueDB.db')
+metadata = MetaData()
+metadata.bin=engine
+
+
 
 @app.context_processor
 def user_navbar():
@@ -65,9 +70,10 @@ class Admin(db.Model, UserMixin):
 class user_hist_rating(db.Model):
     u_id = db.Column(db.Integer,nullable=False)
     show_id = db.Column(db.Integer,nullable=False)
-    user_rating = db.Column(db.Float)
+    venue_id = db.Column(db.Integer,nullable=False)
+    user_rating = db.Column(db.Float,default=0.0)
     __mapper_args__ = {
-        'primary_key':[u_id,show_id]
+        'primary_key':[u_id,show_id,venue_id]
     }
 
 
@@ -415,7 +421,7 @@ def booking(venue_id,show_id):
         # return render_template('dummy.html')
         flash('Booking Confirmed')
         show.available_seats = int(show.available_seats) - int(form.number_of_seats.data)
-        user_hist=user_hist_rating(u_id=current_user.id,show_id=show_id)
+        user_hist=user_hist_rating(u_id=current_user.id,show_id=show_id,venue_id=venue_id)
         db.session.add(user_hist)
         db.session.commit()
         return render_template('ticket_confirmation.html',form=form, venue=venue, show=show)
@@ -439,26 +445,42 @@ def search():
         venues = venues.filter(Venue.name.like('%' +searched+'%')).all()
         return render_template("search.html", form = form, searched = searched, venues=venues, shows=shows )
 
-@app.route('/user_rating',methods=['POST','GET'])
-def rating(u_id,show_id):
-    form=RatingForm()
-    show = user_hist_rating.query.filter_by(u_id=u_id,show_id=show_id)
+@app.route('/user_rating/<int:u_id>/<int:show_id>/<int:venue_id>',methods=['POST','GET'])
+def rating(u_id,show_id,venue_id):
+    form=RatingForm()   
+    show = user_hist_rating.query.get_or_404((u_id,show_id,venue_id))
     user_bookings = user_hist_rating.query.all()
-    if(form.validate_on_submit()):
-        show.rating = form.rating.data
-        db.session.commit()
-        return render_template('admin-user_bookings.html',form=form, show=show,user_bookings=user_bookings)
+    if(request.method=='POST'):
+        show.user_rating = form.rating.data
+        try:
+            db.session.commit()
+            history = user_hist_rating.query.filter_by(u_id=u_id)
+            shows = Show.query.all()
+            # return render_template('dummy.html')
+            return render_template('user_history.html',history=history,shows=shows,form=form)
+        except:
+            return render_template('dummy.html')
+    return render_template('user_rating.html',show=show,user_bookings=user_bookings,form=form)
 
 @app.route('/user_bookings',methods=['POST','GET'])
 def user_bookings():
     user_bookings = user_hist_rating.query.all()
-    return render_template('admin-user_bookings.html')
+    for booking in user_bookings:
+        venue_id = booking.venue_id
+        show_id = booking.show_id
+        shows = user_hist_rating.query.filter_by(venue_id=venue_id,show_id=show_id)
+        ratings=[]
+        for show in shows: 
+            ratings.append(show.user_rating) 
+        booking.rating = sum(ratings)/len(ratings)
+    return render_template('admin-user_bookings.html',user_bookings=user_bookings)
 
 @app.route('/user-history',methods=['GET','POST'])
 def user_history():
-    form = RatingForm()
+    form=RatingForm()
     u_id = current_user.id
     # return render_template("dummy.html" , uid=uid)
     history = user_hist_rating.query.filter_by(u_id=u_id)
+    shows = Show.query.all()
     # return render_template(history=history)
-    return render_template('user_history.html',history=history,form=form)
+    return render_template('user_history.html',history=history,shows=shows,form=form)

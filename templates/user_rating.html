@@ -1,0 +1,16 @@
+{% extends 'baseuser.html' %}
+
+{% block content %}
+
+<div class="shadow p-3 mb-5 bg-body rounded">
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        {{ form.rating.label(class="form-label") }}
+        {{ form.rating(class="form-control")}}
+    </br></br>
+        {{ form.submit(class="btn btn-dark") }}
+    </br></br>
+    </form>
+</div>
+
+{% endblock %}
