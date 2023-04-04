@@ -19,12 +19,12 @@
     <form method="POST">
         {{ form.hidden_tag() }}
         {{ form.user_username.label(class="form-label") }}
-        {{ form.user_username(class="form-control")}}<!-- String input field name-->
+        {{ form.user_username(class="form-control")}}
      </br></br>
         {{ form.password.label(class="form-label") }}
         {{ form.password(class="form-control")}}
     </br></br>
-        {{ form.submit(class="btn btn-dark") }}<!-- Submit button -->
+        {{ form.submit(class="btn btn-dark") }}
     </br></br>
     <a href="{{ url_for('register_user') }}">
     Don't have an account? Click here to register</a>

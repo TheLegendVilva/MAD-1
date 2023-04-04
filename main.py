@@ -15,6 +15,11 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'MAD1_PROJECT'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///venueDB.db'
 
+@app.context_processor
+def user_navbar():
+    form = SearchForm()
+    return dict(form=form)
+
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
@@ -56,6 +61,15 @@ class Admin(db.Model, UserMixin):
     username = db.Column(db.String(255), nullable=False)
     password = db.Column(db.String(8), nullable=False)
     date_added = db.Column(db.DateTime, default=datetime.utcnow())
+
+class user_hist_rating(db.Model):
+    u_id = db.Column(db.Integer,nullable=False)
+    show_id = db.Column(db.Integer,nullable=False)
+    user_rating = db.Column(db.Float)
+    __mapper_args__ = {
+        'primary_key':[u_id,show_id]
+    }
+
 
 
 class venueForms(FlaskForm):
@@ -109,6 +123,13 @@ class bookingForm(FlaskForm):
     number_of_seats = IntegerField('Number of seats: ',validators=[DataRequired()])
     submit=SubmitField("Confirm Booking") 
     
+class SearchForm(FlaskForm):
+    searched = StringField("Searched", validators=[DataRequired()])
+    submit = SubmitField("Search")
+
+class RatingForm(FlaskForm):
+    rating = FloatField("Rating: ", validators=[DataRequired()])
+    submit = SubmitField("Enter")
 
 # Flask_login stuff
 adminlogin_manager = LoginManager()
@@ -168,7 +189,7 @@ def admin_dashboard():
 @login_required
 def admin_logout():
     logout_user()
-    return redirect(url_for('adminLogin'))
+    return redirect(url_for('home'))
 
 
 @app.route("/addvenue", methods=['GET', 'POST'])
@@ -388,14 +409,14 @@ def user_logout():
 @login_required
 def booking(venue_id,show_id):
     form =bookingForm()
-    venue_id=1
-    show_id=1
     venue = Venue.query.get_or_404(venue_id)
     show = Show.query.get_or_404(show_id)
     if(form.validate_on_submit() and form.number_of_seats.data <= show.available_seats):
         # return render_template('dummy.html')
         flash('Booking Confirmed')
         show.available_seats = int(show.available_seats) - int(form.number_of_seats.data)
+        user_hist=user_hist_rating(u_id=current_user.id,show_id=show_id)
+        db.session.add(user_hist)
         db.session.commit()
         return render_template('ticket_confirmation.html',form=form, venue=venue, show=show)
     elif(form.validate_on_submit() and show.available_seats==0):
@@ -405,3 +426,39 @@ def booking(venue_id,show_id):
         flash('Enter valid number of seats to confirm booking')
         return render_template('booking_show.html',show=show,venue=venue,form=form)
     return render_template('booking_show.html',show=show,venue=venue,form=form)
+
+
+@app.route('/search',methods=['POST','GET'])
+def search():
+    form = SearchForm()
+    shows = Show.query
+    venues = Venue.query
+    if(form.validate_on_submit()):
+        searched = form.searched.data
+        shows=shows.filter(Show.name.like('%'+searched+'%')).all()
+        venues = venues.filter(Venue.name.like('%' +searched+'%')).all()
+        return render_template("search.html", form = form, searched = searched, venues=venues, shows=shows )
+
+@app.route('/user_rating',methods=['POST','GET'])
+def rating(u_id,show_id):
+    form=RatingForm()
+    show = user_hist_rating.query.filter_by(u_id=u_id,show_id=show_id)
+    user_bookings = user_hist_rating.query.all()
+    if(form.validate_on_submit()):
+        show.rating = form.rating.data
+        db.session.commit()
+        return render_template('admin-user_bookings.html',form=form, show=show,user_bookings=user_bookings)
+
+@app.route('/user_bookings',methods=['POST','GET'])
+def user_bookings():
+    user_bookings = user_hist_rating.query.all()
+    return render_template('admin-user_bookings.html')
+
+@app.route('/user-history',methods=['GET','POST'])
+def user_history():
+    form = RatingForm()
+    u_id = current_user.id
+    # return render_template("dummy.html" , uid=uid)
+    history = user_hist_rating.query.filter_by(u_id=u_id)
+    # return render_template(history=history)
+    return render_template('user_history.html',history=history,form=form)

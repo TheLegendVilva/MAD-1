@@ -1,0 +1,29 @@
+{% extends 'baseuser.html' %}
+
+{% block content %} 
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>{{message}}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">u_id</th>
+        <th scope="col">show_id</th>
+        <th scope="col">rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for h in history %}
+      <tr>
+        <td>{{ h.u_id }}</td>
+        <td>{{ h.show_id }}</td>
+        <td>{{ h.rating }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+ 
+{% endblock %}

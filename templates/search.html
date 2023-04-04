@@ -1,0 +1,11 @@
+{% extends 'baseuser.html' %}
+{% block content %}
+</br><h3>Did you mean...{{ searched }}</h3>
+{% for venue in venues %}
+{{venue.name}}
+{% endfor %}
+
+{% for show in shows %}
+    {{show.name}}</br>
+{% endfor %}
+{% endblock %}

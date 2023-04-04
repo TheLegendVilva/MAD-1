@@ -15,12 +15,15 @@
   {% for venue in venues %}
   <div class="media-element">
      <div class="card" style="width:18rem;overflow-x: scroll;height: 300px;">
+      
       <div class="overflow-y: scroll;">
       <ul class="list-group list-group-flush">  
+        <li class="list-group-item">Venue: {{ venue.name }}</li>
         {% for show in shows %}
             {% if show.venue_id == venue.id %}
-            Show Name:
-              <li class="list-group-item">{{ show.name }}</li>
+              <li class="list-group-item">Show name: {{ show.name }}
+                <a href="{{ url_for('updateshow',id=show.id) }}"><button type="button" class="btn btn-info">Edit</button></a><a href="{{ url_for('deleteshow',id=show.id) }}"><button type="button" class="btn btn-danger">Delete</button></a>
+              </li>
             {% endif %}
         {% endfor %}
       </div>
