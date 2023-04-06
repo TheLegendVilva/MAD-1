@@ -435,18 +435,22 @@ def booking(venue_id,show_id):
 
 
 @app.route('/search',methods=['POST','GET'])
+@login_required
 def search():
     form = SearchForm()
     shows = Show.query
     venues = Venue.query
+    searched=''
     if(form.validate_on_submit()):
         searched = form.searched.data
         shows=shows.filter(Show.name.like('%'+searched+'%')).all()
         venues = venues.filter(Venue.name.like('%' +searched+'%')).all()
         return render_template("search.html", form = form, searched = searched, venues=venues, shows=shows )
-
+    else:
+        return render_template("search.html", form = form, searched = searched, venues=venues, shows=shows )
 
 @app.route('/user_rating/<int:u_id>/<int:show_id>/<int:venue_id>',methods=['POST','GET'])
+@login_required
 def rating(u_id,show_id,venue_id):
     form=RatingForm()   
     show = user_hist_rating.query.get_or_404((u_id,show_id,venue_id))
@@ -464,6 +468,7 @@ def rating(u_id,show_id,venue_id):
     return render_template('user_rating.html',show=show,user_bookings=user_bookings,form=form)
 
 @app.route('/user_bookings',methods=['POST','GET'])
+@login_required
 def user_bookings():
     user_bookings = user_hist_rating.query.all()
     forVenue=Venue.query.all()
@@ -471,8 +476,8 @@ def user_bookings():
     for booking in user_bookings:
         venue_id = booking.venue_id
         show_id = booking.show_id
-        # forVenue.append(Venue.query.filter_by(id=venue_id))
-        # forShow.append(Show.query.filter_by(id=show_id))
+        forVenue.append(Venue.query.filter_by(id=venue_id))
+        forShow.append(Show.query.filter_by(id=show_id))
         shows = user_hist_rating.query.filter_by(venue_id=venue_id,show_id=show_id)
         ratings=[]
         for show in shows: 
@@ -481,6 +486,7 @@ def user_bookings():
     return render_template('admin-user_bookings.html',user_bookings=user_bookings,forVenue=forVenue,forShow=forShow)
 
 @app.route('/user-history',methods=['GET','POST'])
+@login_required
 def user_history():
     form=RatingForm()
     u_id = current_user.id
