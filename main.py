@@ -466,13 +466,13 @@ def rating(u_id,show_id,venue_id):
 @app.route('/user_bookings',methods=['POST','GET'])
 def user_bookings():
     user_bookings = user_hist_rating.query.all()
-    forVenue=[]
-    forShow=[]
+    forVenue=Venue.query.all()
+    forShow=Show.query.all()
     for booking in user_bookings:
         venue_id = booking.venue_id
         show_id = booking.show_id
-        forVenue.append(Venue.query.filter_by(id=venue_id))
-        forShow.append(Show.query.filter_by(id=show_id))
+        # forVenue.append(Venue.query.filter_by(id=venue_id))
+        # forShow.append(Show.query.filter_by(id=show_id))
         shows = user_hist_rating.query.filter_by(venue_id=venue_id,show_id=show_id)
         ratings=[]
         for show in shows: 

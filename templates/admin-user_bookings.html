@@ -25,13 +25,11 @@
         <td>{{ show.show_id }}</td>
         <td>{{ forShow[user_bookings.index(show)].name }}</td>
         <td>{{ show.venue_id }}</td>
-        <td>{{ forVenue[user_bookings.index(show)].venue_id }}</td>
+        <td>{{ forVenue[user_bookings.index(show)].name }}</td>
         <td>{{ show.rating }}</td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
- {{ forShow[0].name }}
-</br>
-{{ forVenue }}
+
 {% endblock %}
