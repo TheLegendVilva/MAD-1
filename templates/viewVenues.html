@@ -7,42 +7,58 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 {% endfor %}
-<!-- <link href="C:\Programming\MAD-1_Shri\static\css\style.css" rel="stylesheet" type="text/css"> -->
 <link href="{{ url_for('static', filename='css/viewVenues_style.css') }}" rel="stylesheet" type="text/css">
 
-<div class="virtical-center" style="height: 80px;">
-<div class="media-scroller snaps-inline" >
-  {% for venue in venues %}
-  <div class="media-element">
-     <div class="card" style="width:18rem;overflow-x: scroll;height: 300px;">
-      
-      <div class="overflow-y: scroll;">
+<!-- <div class="virtical-center" style="height: 80px;">
+<div class="media-scroller snaps-inline" > -->
+  <div class="card" style="width: 1000px;flex-wrap: wrap;">
+     <div class="card-body">
+       <div class="overflow-y: scroll;"> 
       <ul class="list-group list-group-flush">  
-        <li class="list-group-item">Venue: {{ venue.name }}</li>
+  {% for venue in venues %}
+  
+  <div class="d-flex" style="flex-wrap: wrap; display: flex;">
+     <div class="card-body" style="width: 10px">
+      <!-- <div class="overflow-y: scroll;"> -->
+      <!-- <ul class="list-group list-group-flush">   -->
+         <h5 class="card-title">Venue: {{ venue.name }}</h5><!-- 
+        <li class="list-group-item">Venue: {{ venue.name }}</li> -->
+        </div>
         {% for show in shows %}
             {% if show.venue_id == venue.id %}
-              <li class="list-group-item">Show name: {{ show.name }}
-                <a href="{{ url_for('updateshow',id=show.id) }}"><button type="button" class="btn btn-info">Edit</button></a><a href="{{ url_for('deleteshow',id=show.id) }}"><button type="button" class="btn btn-danger">Delete</button></a>
-              </li>
+            <div class='d-flex bg-secondary'>
+             <div class="card" style="width: 18rem;\;">
+                <div class="card-body">
+              <ul class="list-group list-group-flush">
+              <li class="list-group-item">Show name: {{ show.name }}</li>
+              <li class="list-group-item">Show Timing: {{ show.show_timing }}</li>
+              <li class="list-group-item">Show Capacity: {{ show.available_seats }}</li>
+              </ul>
+              <div class="card-body">
+    <a href="{{ url_for('updateshow',id=show.id) }}"><button type="button" class="btn btn-info">Edit</button></a>
+    
+        <a href="#"><button type="button" class="btn btn-success"></button></a>
+        <a href="{{ url_for('deleteshow',id=show.id) }}"><button type="button" class="btn btn-danger">Delete</button></a>
+  </div>
+
+          </div>
+      </div>
+  </div>
             {% endif %}
         {% endfor %}
-      </div>
-          <!-- <li class="list-group-item">{{ venue.name }}</li>
-          <li class="list-group-item">{{ venue.place }}</li>
-          <li class="list-group-item">{{ venue.location }}</li>
-          <li class="list-group-item">{{ venue.Capacity }}</li>
-          <li class="list-group-item">{{ venue.Capacity }}</li>  -->
-        <center>
-        <a href="{{ url_for('addshow',id=venue.id) }}" >
+        <div class="card" style="text-align: center;">
+        </br></br>
+        </br>
+        </br>
+        
+        
+          <a href="{{ url_for('addshow',id=venue.id) }}" >
         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#123456" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
           <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
         </svg>
         </a>
-      </center>
-      <div class="d-grid gap-2 d-md-block">
-              <a href="{{ url_for('updatevenue',id=venue.id) }}" ><button type="button" class="btn btn-info" >Edit</button></a>
-              <a href="{{ url_for('deletevenue',id=venue.id) }}"><button type="button" class="btn btn-danger float-end">Delete</button></a>  
-      </div> 
+      </div>
+ 
       
       </ul>
     </div>
@@ -54,31 +70,4 @@
 </div>
 </div>
 
-  <!-- <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Name</th>
-        <th scope="col">Place</th>
-        <th scope="col">Location</th>
-        <th scope="col">Capacity</th> 
-        <th scope="col">Date Added</th> 
-      </tr>
-    </thead> -->
-    <!-- <tbody>
-      {% for venue in venues %}
-      <tr>
-        <td>{{ venue.id }}</td>
-        <td>{{ venue.name }}</td>
-        <td>{{ venue.place }}</td>
-        <td>{{ venue.location }}</td>
-        <td>{{ venue.Capacity }}</td>
-        <td>{{ venue.date_added }}</td>
-        <td><a href="{{ url_for('updatevenue',id=venue.id) }}" ><button type="button" class="btn btn-info" >Edit</button></a></td>
-        <td><a href="{{ url_for('deletevenue',id=venue.id) }}"><button type="button" class="btn btn-danger">Delete</button></a></td>
-        <td><a href="{{ url_for('addshow',id=venue.id) }}" ><button type="button" class="btn btn-success">Add Show</button></a></td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table> -->
 {% endblock %}

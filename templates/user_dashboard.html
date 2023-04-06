@@ -1,5 +1,59 @@
 {% extends 'baseuser.html' %}
 
 {% block content %} 
-Hello
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>{{message}}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+<link href="{{ url_for('static', filename='css/viewVenues_style.css') }}" rel="stylesheet" type="text/css">
+
+<!-- <div class="virtical-center" style="height: 80px;">
+<div class="media-scroller snaps-inline" > -->
+  <div class="card" style="width: 1000px;">
+     <div class="card-body">
+       <div class="overflow-y: scroll;"> 
+      <ul class="list-group list-group-flush">  
+  {% for venue in venues %}
+  
+  <div class="d-flex p-2" style="width: 18rem;">
+     <div class="card-body">
+      <!-- <div class="overflow-y: scroll;"> -->
+      <!-- <ul class="list-group list-group-flush">   -->
+         <h5 class="card-title">Venue: {{ venue.name }}</h5><!-- 
+        <li class="list-group-item">Venue: {{ venue.name }}</li> -->
+        </div>
+        {% for show in venue.shows %}
+            {% if show.venue_id == venue.id %}
+            <div class='d-flex bg-secondary'>
+             <div class=" card" style="width: 18rem;">
+                <div class="card-body">
+              <ul class="list-group list-group-flush">
+              <li class="list-group-item">Show name: {{ show.name }}</li>
+              <li class="list-group-item">Show Timing: {{ show.show_timing }}</li>
+              <li class="list-group-item">Show Capacity: {{ show.available_seats }}</li>
+              </ul>
+              <div class="card-body">
+    <a href="{{ url_for('booking',show_id=show.id,venue_id=venue.id) }}"><button type="button" class="btn btn-info">Book Tickets</button></a>
+  </div>
+
+          </div>
+      </div>
+  </div>
+            {% endif %}
+        {% endfor %}
+      </div>
+  
+      
+      </ul>
+    </div>
+  </div>
+  </t></t>
+  <!-- </br></br> -->
+  {% endfor %}
+  
+</div>
+</div>
+
 {% endblock %}
