@@ -1,7 +1,7 @@
 README FILE:
 After extracting the code you should first open your terminal window (I recommend using GitBash terminal).
 Start the Virutal enviornment (code is given below):
-```
+
 source virt/scripts/activate 
 ```
 After that install the neccessary requiered file (code is given below):
