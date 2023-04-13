@@ -1,6 +1,7 @@
 {% extends 'baseadmin.html' %}
 
 {% block content %} 
+<body style="background: black;">
 {% if name %}
   <table class="table">
     <thead>
@@ -33,36 +34,147 @@
   </table>
  
 {% else %}
-  <h1>Update Show:</h1>
-<!-- <div class="card" style="text-align: center; width: 400px;">
-  <div class="card-body">
-  
-  <div class="shadow p-3 mb-5 bg-body rounded"> -->
-    <form action="{{ url_for('updateshow',id=show_to_update.id) }}" method="POST">
-        {{ form.hidden_tag() }}
-        {{ form.show_name.label(class="form-label") }}
-        {{ form.show_name(class="form-control", value = show_to_update.name) }}<!-- String input field name-->
-      </br>
-        {{ form.rating.label(class="form-label") }}
-        {{ form.rating(class="form-control",value = show_to_update.rating) }}
-      </br>
-        {{ form.tags.label(class="form-label") }}
-        {{ form.tags(class="form-control", value = show_to_update.tags)}}
-      </br>
-        {{ form.timing.label(class="form-label") }}
-        {{ form.timing(class="form-control", value = show_to_update.show_timing) }}
-      </br>
-        {{ form.ticket_price.label(class="form-label") }}
-        {{ form.ticket_price(class="form-control",value = show_to_update.ticket_price) }}
-      </br>
-        {{ form.available_seats.label(class="form-label") }}
-        {{ form.available_seats(class="form-control",value = show_to_update.available_seats) }}
-    </br>
-        {{ form.submit(class="btn btn-dark") }}
-        
+
+  <form action="{{ url_for('updateshow',id=show_to_update.id) }}" method="POST" >
+    <div class="login-box" style="margin-top: 200px;">
+      
+      <div class="user-box">
+    
+
+  <input type="hidden" name="{{ form.hidden_tag() }}">
+  <label for="show_name" class="form-label" style="margin-top: -34px">Show Name</label>
+  <input type="text" name="show_name" id="show_name" class="form-control" value="{{ show_to_update.name }}">
+  </div>
+  <br>
+  <div class="user-box">
+  <label for="rating" class="form-label" style="margin-top: -34px">Rating</label>
+  <input type="number" name="rating" id="rating" class="form-control" value="{{ show_to_update.rating }}">
+  </div>
+  <br>
+  <div class="user-box">
+  <label for="tags" class="form-label" style="margin-top: -34px">Tags</label>
+  <input type="text" name="tags" id="tags" class="form-control" value="{{ show_to_update.tags }}">
+  </div>
+  <br>
+  <div class="user-box">
+  <label for="timing" class="form-label" style="margin-top: -34px">{{ form.timing.label.text }}</label>
+  <input type="text" name="timing" id="timing" class="form-control" value="{{ show_to_update.show_timing }}">
+  </div>
+  <br>
+  <div class="user-box">
+  <label for="ticket_price" class="form-label" style="margin-top: -34px">Ticket Price</label>
+  <input type="number" name="ticket_price" id="ticket_price" class="form-control" value="{{ show_to_update.ticket_price }}">
+  </div>
+  <br>
+  <div class="user-box">
+  <label for="available_seats" class="form-label" style="margin-top: -34px">Available Seats</label>
+  <input type="number" name="available_seats" id="available_seats" class="form-control" value="{{ show_to_update.available_seats }}">
+</div>
+  <br>
+<button class='btn'>
+  <input type="submit" value="Submit" class="btn btn-dark" />
+</button></form>
+
 <!-- </form>
   </div>
 </div> -->
+<style>
+  .login-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  padding: 40px;
+  transform: translate(-50%, -50%);
+  background: rgba(24, 20, 20, 0.987);
+  box-sizing: border-box;
+  box-shadow: 0 15px 25px rgba(0,0,0,.6);
+  border-radius: 10px;
+}
+
+.login-box .user-box {
+  position: relative;
+}
+
+.login-box .user-box input {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 30px;
+  border: none;
+  border-bottom: 1px solid #fff;
+  outline: none;
+  background: transparent;
+}
+
+.login-box .user-box label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #fff;
+  pointer-events: none;
+  transition: .5s;
+}
+
+.login-box .user-box input:focus ~ label,
+.login-box .user-box input:valid ~ label {
+  top: -20px;
+  left: 0;
+  color: #bdb8b8;
+  font-size: 12px;
+}
+
+.login-box form center {
+  position: relative;
+  display: inline-block;
+  padding: 10px 20px;
+  color: #ffffff;
+  font-size: 16px;
+  text-decoration: none;
+  text-transform: uppercase;
+  overflow: hidden;
+  transition: .5s;
+  margin-top: 40px;
+  letter-spacing: 4px
+}
+
+.login-box center:hover {
+  background: #03f40f;
+  color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #03f40f,
+              0 0 25px #03f40f,
+              0 0 50px #03f40f,
+              0 0 100px #03f40f;
+}
+
+.login-box center span {
+  position: absolute;
+  display: block;
+}
+
+@keyframes btn {
+  0% {
+    left: -100%;
+  }
+
+  50%,100% {
+    left: 100%;
+  }
+}
+
+.login-box center span:nth-child(1) {
+  bottom: 2px;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #03f40f);
+  animation: btn-anim1 2s linear infinite;
+}
+</style>
 
 {% endif %}
 

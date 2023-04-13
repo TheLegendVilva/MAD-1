@@ -9,23 +9,26 @@
 {% endfor %}
 
 {% if name %}
-  <table class="table">
+<body style="background: black;">
+ <table class="table table-bordered border-primary">
     <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">venue id</th>
-        <th scope="col">Show Name</th>
-        <th scope="col">rating</th>
-        <th scope="col">timing</th>
-        <th scope="col">tags</th> 
-        <th scope="col">ticket_price</th> 
-        <th scope="col">available_seats</th> 
+      <tr style="color: silver; text-transform: uppercase;">
+        <th scope="col" style="color: gold;font-weight: bold;">SR. NO.</th>
+        <th scope="col" style="color: gold;">venue id</th>
+        <th scope="col" style="color: gold;">Show Name</th>
+        <th scope="col" style="color: gold;">rating</th>
+        <th scope="col" style="color: gold;">timing</th>
+        <th scope="col" style="color: gold;">tags</th> 
+        <th scope="col" style="color: gold;">ticket price</th> 
+        <th scope="col" style="color: gold;">available seats</th> 
+        <th scope="col" style="color: gold;">Edit</th>
+        <th scope="col" style="color: gold;">Delete</th>
       </tr>
     </thead>
     <tbody>
       {% for show in Shows %}
-      <tr>
-        <td>{{ show.id }}</td>
+      <tr style="color: gold;">
+        <td >{{ show.id }}</td>
         <td>{{ show.venue_id }}</td>
         <td>{{ show.name }}</td>
         <td>{{ show.rating }}</td>
@@ -33,13 +36,33 @@
         <td>{{ show.tags }}</td>
         <td>{{ show.ticket_price }}</td>
         <td>{{ show.available_seats }}</td>
-        <td><a href="{{ url_for('updateshow',id=show.id) }}"><button type="button" class="btn btn-info">Edit</button></a></td>
-        <td><a href="{{ url_for('deleteshow',id=show.id) }}"><button type="button" class="btn btn-danger">Delete</button></a></td>
+        <td><a href="{{ url_for('updateshow',id=show.id) }}"><button>
+    EDIT
+</button></a></td>
+        <td><a href="{{ url_for('deleteshow',id=show.id) }}"><button type="button">Delete</button></a></td>
       </tr>
+      <style>
+        button {
+  border: none;
+  outline: none;
+  background-color: #6c5ce7;
+  padding: 10px 20px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  border-radius: 5px;
+  transition: all ease 0.1s;
+  box-shadow: 0px 5px 0px 0px #a29bfe;
+}
+
+button:active {
+  transform: translateY(5px);
+  box-shadow: 0px 0px 0px 0px #a29bfe;
+}
+</style>
       {% endfor %}
     </tbody>
   </table>
- 
 {% else %}
   <h1>Add a show:</h1>
 <!-- <div class="card" style="text-align: center; width: 400px;">

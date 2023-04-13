@@ -7,26 +7,198 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 {% endfor %}
-<h3>
+<body style="background: black;">
+<div class="card">
+    <h2>BOOKING PAGE</h2>
+</br>
+    <h5>
 Booking Show- {{ show.name }}
-</h3 >
+
+</br>
 </br>
 Time = {{ show.show_timing }}
 </br>
+</br>
 Venue = {{ venue.name }}
 </br>
+</br>
 Available Seats = {{ show.available_seats }}
-</br></br>
+</br>
+</br>
 Price per ticekt:{{ show.ticket_price }}
-</br></br>
+</br>
+</br>
 <form method="POST">
 {{ form.hidden_tag() }}
 {{ form.number_of_seats.label(class="form-label") }}
 {{ form.number_of_seats(class="form-control")}}
 </br></br>
-{{form.submit(class="btn btn-dark")}}
+
+<button style="align-content: center;"> 
+    <span style="align-content: center;">Book Tickets</span>
+    <div class="top"></div>
+    <div class="left"></div>
+    <div class="bottom"></div>
+    <div class="right"></div>
+</button>
 
 </form>
+</h5>
+</div>
+<style>
+    .card {
+  width: 1000px;
+  height: 700px;
+  background: #07182E;
+  position: relative;
+  display: flex;
+  place-content: center;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.card h2,h5 {
+  z-index: 1;
+  color: white;
+  font-size: 2em;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  width: 100px;
+  background-image: linear-gradient(180deg, rgb(0, 183, 255), rgb(255, 48, 255));
+  height: 130%;
+  animation: rotBGimg 3s linear infinite;
+  transition: all 0.2s linear;
+}
+
+@keyframes rotBGimg {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  background: #07182E;
+  ;
+  inset: 5px;
+  border-radius: 15px;
+}  
+/* .card:hover:before {
+  background-image: linear-gradient(180deg, rgb(81, 255, 0), purple);
+  animation: rotBGimg 3.5s linear infinite;
+} */
+
+button {
+  padding: 20px 60px;
+  background-color: #000;
+  border: none;
+  font-size: 18px;
+  position: relative;
+  /* overflow: hidden; */
+  transition: 500ms;
+}
+
+button span {
+  color: gray;
+  position: relative;
+  transition: 500ms;
+  transition-delay: 500ms;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 600;
+}
+
+button:before {
+  content: '';
+  position: absolute;
+  width: 0%;
+  height: 0%;
+  left: 50%;
+  right: 50%;
+  top: 50%;
+  bottom: 50%;
+  transition: 500ms;
+  transition-delay: 500ms;
+  background-color: red;
+  box-shadow: 0 0 10px red,
+   0 0 30px red, 
+   0 0 50px red;
+}
+
+button div {
+  transition: 500ms;
+  position: absolute;
+  background-color: red;
+  box-shadow: 0 0 15px red, 0 0 30px red, 0 0 50px red;
+}
+
+button .top {
+  width: 15px;
+  height: 2px;
+  top: 0;
+  left: 0;
+}
+
+button .bottom {
+  width: 15px;
+  height: 2px;
+  bottom: 0;
+  right: 0;
+}
+
+button .left {
+  width: 2px;
+  height: 15px;
+  top: 0;
+  left: 0;
+}
+
+button .right {
+  width: 2px;
+  height: 15px;
+  bottom: 0;
+  right: 0;
+}
+
+button:hover {
+  color: #000;
+}
+
+button:hover span {
+  color: #000;
+}
+
+button:hover:before {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+button:hover .top, 
+button:hover .bottom {
+  width: 100%;
+}
+
+button:hover .left,
+button:hover .right {
+  height: 100%;
+}
+
+</style>
+
 
 
 {% endblock %}

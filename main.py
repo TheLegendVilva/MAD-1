@@ -5,11 +5,13 @@ from flask_migrate import Migrate
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, StringField, PasswordField,DateTimeField, ValidationError, IntegerField,FloatField
 from werkzeug.security import generate_password_hash, check_password_hash
-from wtforms.validators import DataRequired, InputRequired, Length
+from wtforms.validators import DataRequired, InputRequired, Length, NumberRange
 import sqlite3
 from datetime import datetime
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_bcrypt import Bcrypt
+
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'MAD1_PROJECT'
@@ -93,14 +95,12 @@ class AdminForm(FlaskForm, UserMixin):
 
 class ShowForm(FlaskForm):
     show_name = StringField('Show name', validators=[DataRequired()])
-    rating = FloatField('Rating', validators=[DataRequired()])
+    rating = FloatField('Rating', validators=[DataRequired(), NumberRange(min=0, max=10)])
     timing = DateTimeField('Date & Time',validators=[DataRequired()])
     tags = StringField('Tags')
     ticket_price = IntegerField('Ticket Price', validators=[DataRequired()])
     available_seats = IntegerField('Available Seats:',validators=[DataRequired()])
     submit = SubmitField("Add show")
-
-
 
 class RegisterUserForm(FlaskForm, UserMixin):
     user_username = StringField('Username', validators=[DataRequired()])
@@ -169,7 +169,7 @@ def adminLogin():
     form = AdminForm()
     admin_username = None
     admin_password = None
-    if (form.validate_on_submit()):
+    if (request.method == "POST"):
         admin_username = form.admin_username.data
         admin_password = form.password.data
         if (admin_password != Admin.query.filter_by(username=admin_username).first().password):
@@ -203,7 +203,8 @@ def admin_logout():
 def addvenue():
     form = venueForms()
     name = None
-    if (form.validate_on_submit):
+    venues = Venue.query.order_by(Venue.date_added)
+    if (request.method == "POST"):
         name = form.name.data
         place = form.place.data
         location = form.location.data
@@ -226,6 +227,8 @@ def addvenue():
         form.capacity.data = ''
         venues = Venue.query.order_by(Venue.date_added)
         return render_template('addvenue.html',form=form, venues=venues)
+    return render_template('addvenue.html',form=form, venues=venues)
+
 
 @app.route('/updatevenue/<int:id>', methods=['POST','GET'])
 @login_required
@@ -321,11 +324,12 @@ def updateshow(id):
     form = ShowForm()
     show_to_update = Show.query.get_or_404(id)
     if (request.method == 'POST'):
-        show_to_update.name = request.form['show_name']
-        show_to_update.rating = request.form['rating']
-        show_to_update.timing = request.form['timing']
-        show_to_update.tags = request.form['tags']
-        show_to_update.ticket_price = request.form['ticket_price']
+        show_to_update.name = form.show_name.data
+        show_to_update.rating = form.rating.data
+        show_to_update.timing =form.timing.data
+        show_to_update.tags = form.tags.data
+        show_to_update.ticket_price = form.ticket_price.data
+        show_to_update.available_seats=form.available_seats.data
         try:
             db.session.commit()
             # return render_template('dummy.html')
@@ -368,13 +372,10 @@ def deleteshow(id):
 @app.route('/user-login/', methods=['POST', 'GET'])
 def user_login():
     form = LoginUserForm()
-    if (form.validate_on_submit()):
+    if (request.method == "POST"):
         user_username = form.user_username.data
         user_password = form.password.data
         user = Users.query.filter_by(username=user_username).first()
-        # if(user_password == '123'):
-        #     flash('Login Successful')
-        #     return render_template('user_login.html', form=form, name=user_username)
         if user:
             if bcrypt.check_password_hash(user.password, user_password):
                 login_user(user)

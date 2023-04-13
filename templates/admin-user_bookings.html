@@ -1,26 +1,28 @@
 {% extends 'baseadmin.html' %}
 
 {% block content %} 
+<body style="background: black;">
 {% for message in get_flashed_messages() %}
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         <strong>{{message}}</strong>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 {% endfor %}
-  <table class="table">
+</br></br>
+  <table class="table table-bordered border-primary">
     <thead>
-      <tr>
-        <th scope="col">u_id</th>
-        <th scope="col">show_id</th>
-        <th scope="col">show_name</th>
-        <th scope="col">venue_id</th>
-        <th scope="col">venue_name</th>
+      <tr style="color: gold; text-transform: uppercase;">
+        <th scope="col">user id</th>
+        <th scope="col">show id</th>
+        <th scope="col">show name</th>
+        <th scope="col">venue id</th>
+        <th scope="col">venue name</th>
         <th scope="col">Average Rating</th>
       </tr>
     </thead>
     <tbody>
       {% for show in user_bookings %}
-      <tr>
+      <tr style="color: gold; text-transform: uppercase;">
         <td>{{ show.u_id }}</td>
         <td>{{ show.show_id }}</td>
         <td>{{ forShow[user_bookings.index(show)].name }}</td>

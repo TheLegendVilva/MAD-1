@@ -1,32 +1,35 @@
 {% extends 'baseuser.html' %}
 
 {% block content %} 
+<body style="background: black;">
 {% for message in get_flashed_messages() %}
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         <strong>{{message}}</strong>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 {% endfor %}
-<h3>
-Booking Show- {{ show.name }}
+<h3 style="color: gold; ">
+
+Booking Show - {{ show.name }}
 </h3 >
 </br>
 <!-- <div style="text-align: right"> -->
+    <h3 style="color: gold;">
 Time = {{ show.show_timing }}
-</br>
+</br></br>
 <!-- </div> -->
 </td>
 Venue = {{ venue.name }}
-</br>
+</br></br>
 Available Seats = {{ show.available_seats }}
 </br></br>
-{{ form.number_of_seats.label(class="form-label") }} : {{ form.number_of_seats.data }}
+{{ form.number_of_seats.label(class="form-label") }}  {{ form.number_of_seats.data }}
 </br></br>
 
 Price per ticekt:{{ show.ticket_price }}
 </br></br>
 Total ammount: {{ show.ticket_price * form.number_of_seats.data }}
- 
+ </h3>
 
 
 {% endblock %}

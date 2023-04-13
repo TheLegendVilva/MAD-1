@@ -1,73 +1,385 @@
 {% extends 'baseadmin.html' %}
-
 {% block content %} 
+
+<body style="background: black;">
 {% for message in get_flashed_messages() %}
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         <strong>{{message}}</strong>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 {% endfor %}
-<link href="{{ url_for('static', filename='css/viewVenues_style.css') }}" rel="stylesheet" type="text/css">
 
-<!-- <div class="virtical-center" style="height: 80px;">
-<div class="media-scroller snaps-inline" > -->
-  <div class="card" style="width: 1000px;flex-wrap: wrap;">
-     <div class="card-body">
-       <div class="overflow-y: scroll;"> 
-      <ul class="list-group list-group-flush">  
-  {% for venue in venues %}
-  
-  <div class="d-flex" style="flex-wrap: wrap; display: flex;">
-     <div class="card-body" style="width: 10px">
-      <!-- <div class="overflow-y: scroll;"> -->
-      <!-- <ul class="list-group list-group-flush">   -->
-         <h5 class="card-title">Venue: {{ venue.name }}</h5><!-- 
-        <li class="list-group-item">Venue: {{ venue.name }}</li> -->
-        </div>
-        {% for show in shows %}
+<style>
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px; /* Add some gap between the cards */
+    }
+
+    .card {
+        display: flex;
+        flex-direction: column;
+        width: 250px;
+        height: 254px;
+        background-image: linear-gradient(163deg, #00ff75 0%, #3700ff 100%);
+        border-radius: 30px;
+        transition: all .3s;
+        margin-bottom: 0px; /* Add some margin between the cards */
+    }
+
+    .card2 {
+        display: flex;
+        width: 250  px;
+        height: 254px;
+        background-color: #1a1a1a;
+        border-radius: 20px;
+        transition: all .2s;
+    }
+
+    .card2:hover {
+        transform: scale(0.98);
+        border-radius: 20px;
+    }
+
+    .card:hover {
+        box-shadow: 0px 0px 30px 1px rgba(0, 255, 117, 0.30);
+    }
+    /* === removing default button style ===*/
+.button {
+  margin: 0;
+  height: auto;
+  background: transparent;
+  padding: 0;
+  border: none;
+}
+
+/* button styling */
+.button {
+  --border-right: 6px;
+  --text-stroke-color: rgba(255,255,255,0.6);
+  --animation-color: #37FF8B;
+  --fs-size: 2em;
+  letter-spacing: 3px;
+  text-decoration: none;
+  font-size: var(--fs-size);
+  font-family: "Arial";
+  position: relative;
+  text-transform: uppercase;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--text-stroke-color);
+}
+/* this is the text, when you hover on button */
+.hover-text {
+  position: absolute;
+  box-sizing: border-box;
+  content: attr(data-text);
+  color: var(--animation-color);
+  width: 0%;
+  inset: 0;
+  border-right: var(--border-right) solid var(--animation-color);
+  overflow: hidden;
+  transition: 0.5s;
+  -webkit-text-stroke: 1px var(--animation-color);
+}
+/* hover */
+.button:hover .hover-text {
+  width: 100%;
+  filter: drop-shadow(0 0 23px var(--animation-color))
+}
+</style>
+
+{% for venue in venues %}
+</br></br>
+<button data-text="Awesome" class="button">
+    <span class="actual-text">&nbsp;{{ venue.name }}&nbsp; <button class="my-button"><a href="{{ url_for('updatevenue', id=venue.id) }}" style="text-decoration: none; color: white;">
+    Edit
+  </a>
+</button></span>
+<button data-text="Awesome" class="button">
+     <button class="my-button"><a href="{{ url_for('deletevenue', id=venue.id) }}" style="text-decoration: none; color: white;">
+    Delete 
+  </a>
+</button>
+</button>
+    <div class="card-container">
+
+        {% for show in venue.shows %}
             {% if show.venue_id == venue.id %}
-            <div class='d-flex bg-secondary'>
-             <div class="card" style="width: 18rem;\;">
-                <div class="card-body">
-              <ul class="list-group list-group-flush">
-              <li class="list-group-item">Show name: {{ show.name }}</li>
-              <li class="list-group-item">Show Timing: {{ show.show_timing }}</li>
-              <li class="list-group-item">Show Capacity: {{ show.available_seats }}</li>
-              </ul>
-              <div class="card-body">
-    <a href="{{ url_for('updateshow',id=show.id) }}"><button type="button" class="btn btn-info">Edit</button></a>
+                <div class="card">
+                    <div class="card-title"><h5 style="text-align: center;"></h5>
+                    <div class="card2">
+                        <!-- <div class="card-body"> -->
+                            <ul>
+                                
+                            </br>
+                                <li style="color: gold; list-style-type: none; text-align: left;">Show name: {{ show.name }}</li>
+                            </br>
+                                <li style="color: gold; list-style-type: none;">Show Timing:</br> {{ show.show_timing }}</li>
+                                </br>
+                                <li style="color: gold; list-style-type: none;">Show Capacity: {{ show.available_seats }}</li>
+                                 </br>
+                                
+                            <div class="container" style="display: flex; align-items: center;">
+                            <button class="my-button"><a href="{{ url_for('updateshow',id=show.id) }}" style="text-decoration: none; color: white;">
+    Edit
+  </a>
+</button>
+<div class="container" style="width: 3px">
+  <a href="{{ url_for('deleteshow',id=show.id) }}" style="text-decoration: none;">
+<button class="btn">
+  
+  <p class="paragraph">Delete</p>
+  <span class="icon-wrapper">
+    <svg class="icon" width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 7V18C6 19.1046 6.89543 20 8 20H16C17.1046 20 18 19.1046 18 18V7M6 7H5M6 7H8M18 7H19M18 7H16M10 11V16M14 11V16M8 7V5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5V7M8 7H16" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
     
-        <a href="#"><button type="button" class="btn btn-success"></button></a>
-        <a href="{{ url_for('deleteshow',id=show.id) }}"><button type="button" class="btn btn-danger">Delete</button></a>
-  </div>
+  </span>
 
-          </div>
-      </div>
-  </div>
+</button>
+</a>
+<style>
+    .btn {
+
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  border: none;
+  position: relative;
+  border-radius: 10px;
+  -webkit-box-shadow: 1px 1px 5px .2px #00000035;
+  box-shadow: 1px 1px 5px .2px #00000035;
+  -webkit-transition: .2s linear;
+  transition: .2s linear;
+  transition-delay: .2s;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: space-between;
+}
+
+.btn:hover {
+  width: 100px;
+  transition-delay: .2s;
+}
+
+.btn:hover > .paragraph {
+  visibility: visible;
+  opacity: 1;
+  -webkit-transition-delay: .4s;
+  transition-delay: .4s;
+}
+
+.btn:hover > .icon-wrapper .icon {
+  transform: scale(0.9);
+}
+
+.bnt:hover > .icon-wrapper .icon path {
+  stroke: black;
+}
+
+.paragraph {
+  color: black;
+  visibility: hidden;
+  opacity: 0;
+  font-size: 15px;
+  margin-right: 10px;
+  margin-top: 10px;
+  -webkit-transition: .2s linear;
+  transition: .2s linear;
+  font-weight: bold;
+  color: White;
+ }
+
+.icon-wrapper {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 2;
+  right: 0;
+  display: flex;
+  align-items: left;
+  justify-content: left;
+}
+
+.icon {
+    color: white;
+    padding-right: 11px;
+  transform: scale(2);
+  transition: .2s linear;
+}
+
+.icon path {
+  stroke: #000;
+  stroke-width: 2px;
+  -webkit-transition: .2s linear;
+  transition: .2s linear;
+}
+ .my-button {
+  width: 5em;
+  position: relative;
+  height: 3em;
+  border: 2px ridge #149CEA;
+  outline: none;
+  background-color: transparent;
+  color: white;
+  transition: 1s;
+  border-radius: 0.3em;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.my-button::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 3%;
+  width: 95%;
+  height: 40%;
+  background-color: #212121;
+  transition: 0.5s;
+  transform-origin: center;
+}
+
+.my-button::before {
+  content: "";
+  transform-origin: center;
+  position: absolute;
+  top: 80%;
+  left: 3%;
+  width: 95%;
+  height: 40%;
+  background-color: #212121;
+  transition: 0.5s;
+}
+
+.my-button:hover::before, .my-button:hover::after {
+  transform: scale(0)
+}
+
+.my-button:hover {
+  box-shadow: inset 0px 0px 25px #1479EA;
+}
+
+</style>
+
+                            </ul>
+                           
+                        </div>
+                    </div>
+                </div>
             {% endif %}
         {% endfor %}
-        <div class="card" style="text-align: center;">
-        </br></br>
-        </br>
-        </br>
-        
-        
-          <a href="{{ url_for('addshow',id=venue.id) }}" >
-        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#123456" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
-        </svg>
-        </a>
-      </div>
- 
-      
-      </ul>
-    </div>
-  </div>
-  </t></t>
-  <!-- </br></br> -->
-  {% endfor %}
-  
+    
+     <a href="{{ url_for('addshow',id=venue.id) }}" >
+<button class="icon-btn add-btn" style="margin-top:100px ;">
+    <div class="add-icon"></div>
+    <div class="btn-txt">Add Show</div>
+</button>
+</a>
 </div>
-</div>
+<style>
+    .icon-btn {
+  width: 50px;
+  height: 50px;
+  border: 1px solid #cdcdcd;
+  background: white;
+  border-radius: 25px;
+  overflow: hidden;
+  position: relative;
+  transition: width 0.2s ease-in-out;
+  font-weight: 500;
+  font-family: inherit;
+}
+
+.add-btn:hover {
+  width: 120px;
+}
+
+.add-btn::before,
+.add-btn::after {
+  transition: width 0.2s ease-in-out, border-radius 0.2s ease-in-out;
+  content: "";
+  position: absolute;
+  height: 4px;
+  width: 10px;
+  top: calc(50% - 2px);
+  background: seagreen;
+}
+
+.add-btn::after {
+  right: 14px;
+  overflow: hidden;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
+.add-btn::before {
+  left: 14px;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+}
+
+.icon-btn:focus {
+  outline: none;
+}
+
+.btn-txt {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.add-btn:hover::before,
+.add-btn:hover::after {
+  width: 4px;
+  border-radius: 2px;
+}
+
+.add-btn:hover .btn-txt {
+  opacity: 1;
+}
+
+.add-icon::after,
+.add-icon::before {
+  transition: all 0.2s ease-in-out;
+  content: "";
+  position: absolute;
+  height: 20px;
+  width: 2px;
+  top: calc(50% - 10px);
+  background: seagreen;
+  overflow: hidden;
+}
+
+.add-icon::before {
+  left: 22px;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+}
+
+.add-icon::after {
+  right: 22px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
+.add-btn:hover .add-icon::before {
+  left: 15px;
+  height: 4px;
+  top: calc(50% - 2px);
+}
+
+.add-btn:hover .add-icon::after {
+  right: 15px;
+  height: 4px;
+  top: calc(50% - 2px);
+}
+</style>
+{% endfor %}
 
 {% endblock %}

@@ -1,6 +1,7 @@
 {% extends 'baseadmin.html' %}
 
 {% block content %} 
+<body style="background: black;">
 {% for message in get_flashed_messages() %}
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         <strong>{{message}}</strong>
@@ -38,29 +39,155 @@
       {% endfor %}
     </tbody>
   </table>
- 
+ <form method="POST">
+    <input type="hidden" name="{{ form.hidden_tag() }}" />
+    <label for="{{ form.name.id }}" class="form-label">{{ form.name.label.text }}</label>
+    <input type="text" name="{{ form.name.name }}" id="{{ form.name.id }}" class="form-control" />
+    <br />
+    <label for="{{ form.place.id }}" class="form-label">{{ form.place.label.text }}</label>
+    <input type="text" name="{{ form.place.name }}" id="{{ form.place.id }}" class="form-control" />
+    <br />
+    <label for="{{ form.location.id }}" class="form-label">{{ form.location.label.text }}</label>
+    <input type="text" name="{{ form.location.name }}" id="{{ form.location.id }}" class="form-control" />
+    <br />
+    <label for="{{ form.capacity.id }}" class="form-label">{{ form.capacity.label.text }}</label>
+    <input type="number" name="{{ form.capacity.name }}" id="{{ form.capacity.id }}" class="form-control" />
+    <br />
+    <input type="submit" value="Submit" class="btn btn-dark" />
+</form>
+
 {% else %}
-  <h1>ADD A VENUE:</h1>
+</br></br>
+  <div class="login-box" style="margin-top: 50px;">
+  <form method="POST">
+    <div class="user-box">
+      <input type="hidden" name="{{ form.hidden_tag() }}">
+    <label for="name" class="form-label">ADD NAME</label>
+    <input type="text" name="name" id="name" class="form-control">
+    
+    </div>
+    <div class="user-box">
+      <label for="place" class="form-label" style="margin-top: -34px">ADD PLACE</label>
+    <input type="text" name="place" id="place" class="form-control" />
+    </div>
+<div class="user-box">
+<label for="location" class="form-label" style="margin-top: -34px">ADD LOCATION</label>
+    <input type="text" name="location" id="location" class="form-control" />
+     </div>
+     <div class="user-box">
+<label for="capacity" class="form-label" style="margin-top: -34px">SET CAPACITY</label>
+    <input type="number" name="capacity" id="capacity" class="form-control" />
+     </div>
+    <center style="align-content: center;">
+
+      <input type="submit" class="btn btn-dark">
+          
+       <span></span>
+    </center>
+  </form>
+</div>
+<style>
+  .login-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  padding: 40px;
+  transform: translate(-50%, -50%);
+  background: rgba(24, 20, 20, 0.987);
+  box-sizing: border-box;
+  box-shadow: 0 15px 25px rgba(0,0,0,.6);
+  border-radius: 10px;
+}
+
+.login-box .user-box {
+  position: relative;
+}
+
+.login-box .user-box input {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 30px;
+  border: none;
+  border-bottom: 1px solid #fff;
+  outline: none;
+  background: transparent;
+}
+
+.login-box .user-box label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #fff;
+  pointer-events: none;
+  transition: .5s;
+}
+
+.login-box .user-box input:focus ~ label,
+.login-box .user-box input:valid ~ label {
+  top: -20px;
+  left: 0;
+  color: #bdb8b8;
+  font-size: 12px;
+}
+
+.login-box form center {
+  position: relative;
+  display: inline-block;
+  padding: 10px 20px;
+  color: #ffffff;
+  font-size: 16px;
+  text-decoration: none;
+  text-transform: uppercase;
+  overflow: hidden;
+  transition: .5s;
+  margin-top: 40px;
+  letter-spacing: 4px
+}
+
+.login-box center:hover {
+  background: #03f40f;
+  color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #03f40f,
+              0 0 25px #03f40f,
+              0 0 50px #03f40f,
+              0 0 100px #03f40f;
+}
+
+.login-box center span {
+  position: absolute;
+  display: block;
+}
+
+@keyframes btn {
+  0% {
+    left: -100%;
+  }
+
+  50%,100% {
+    left: 100%;
+  }
+}
+
+.login-box center span:nth-child(1) {
+  bottom: 2px;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #03f40f);
+  animation: btn-anim1 2s linear infinite;
+}
+</style>
 <!-- <div class="card" style="text-align: center; width: 400px;">
   <div class="card-body">
   
   <div class="shadow p-3 mb-5 bg-body rounded"> -->
-    <form method="POST">
-        {{ form.hidden_tag() }}
-        {{ form.name.label(class="form-label") }}
-        {{ form.name(class="form-control")}}<!-- String input field name-->
-      </br>
-        {{ form.place.label(class="form-label") }}
-        {{ form.place(class="form-control")}}<!-- String input for place-->
-      </br>
-        {{ form.location.label(class="form-label") }}
-        {{ form.location(class="form-control")}}<!-- String input for location-->
-      </br>
-        {{ form.capacity.label(class="form-label") }}
-        {{ form.capacity(class="form-control")}}<!-- Integer input for Capacity-->
-      </br>
-      {{ form.submit(class="btn btn-dark") }}
-</form>
+    
   <!-- </div>
 </div> -->
 
