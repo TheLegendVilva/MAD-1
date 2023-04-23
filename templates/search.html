@@ -64,7 +64,49 @@
             </div> 
             
         {% endfor %}
-    </div>
+</div>
+
+<div class="d-flex p-2" style="width: 18rem;">
+  {% for show in tags %}
+      <div class='d-flex bg-secondary'>
+       <div class=" card" style="width: 18rem;">
+          <div class="card-body">
+        <ul class="list-group list-group-flush">
+        <li class="list-group-item">Show name: {{ show.name }}</li>
+        <li class="list-group-item">Show Timing: {{ show.show_timing }}</li>
+        <li class="list-group-item">Show Capacity: {{ show.available_seats }}</li>
+        </ul>
+        <div class="card-body">
+        <a href="{{ url_for('booking',show_id=show.id,venue_id=show.venue_id) }}"><button type="button" class="btn btn-info">Book Tickets</button></a>
+       </div>
+       </div>
+       </div>
+       </div> 
+       
+   {% endfor %}
+</div>
+
+<div class="d-flex p-2" style="width: 18rem;">
+  {% for show in rating %}
+      <div class='d-flex bg-secondary'>
+       <div class=" card" style="width: 18rem;">
+          <div class="card-body">
+        <ul class="list-group list-group-flush">
+        <li class="list-group-item">Show name: {{ show.name }}</li>
+        <li class="list-group-item">Show Timing: {{ show.show_timing }}</li>
+        <li class="list-group-item">Show Capacity: {{ show.available_seats }}</li>
+        </ul>
+        <div class="card-body">
+        <a href="{{ url_for('booking',show_id=show.id,venue_id=show.venue_id) }}"><button type="button" class="btn btn-info">Book Tickets</button></a>
+       </div>
+       </div>
+       </div>
+       </div> 
+       
+   {% endfor %}
+</div>
+
+
 
 
 <!-- {% for show in shows %}

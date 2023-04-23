@@ -1,6 +1,13 @@
 {% extends 'baseadmin.html' %}
 
 {% block content %} 
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>{{message}}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+
 <body style="background: black;">
 {% if name %}
   <table class="table">

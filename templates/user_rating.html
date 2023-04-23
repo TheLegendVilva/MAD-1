@@ -1,6 +1,12 @@
 {% extends 'baseuser.html' %}
 
 {% block content %}
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>{{message}}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
 
 <div class="shadow p-3 mb-5 bg-body rounded">
     <form method="POST">
