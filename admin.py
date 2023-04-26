@@ -213,16 +213,24 @@ def deleteshow(id):
 @login_required
 def user_bookings():
     user_bookings = user_hist_rating.query.all()
-    forVenue=Venue.query.all()
-    forShow=Show.query.all()
-    for booking in user_bookings:
-        venue_id = booking.venue_id
-        show_id = booking.show_id
-        forVenue.append(Venue.query.filter_by(id=venue_id))
-        forShow.append(Show.query.filter_by(id=show_id))
-        shows = user_hist_rating.query.filter_by(venue_id=venue_id,show_id=show_id)
-        ratings=[]
-        for show in shows: 
-            ratings.append(show.user_rating) 
-        booking.rating = sum(ratings)/len(ratings)
-    return render_template('admin-user_bookings.html',user_bookings=user_bookings,forVenue=forVenue,forShow=forShow)
+    shows={}
+    if(len(list(user_bookings))>0):
+        for h in user_bookings:
+            shows[h.show_id] = Show.query.get_or_404(h.show_id).name
+    venues={}
+    if(len(list(user_bookings))>0):
+        for h in user_bookings:
+            venues[h.show_id] = Venue.query.get_or_404(h.venue_id).name
+    # forVenue=[]
+    # forShow=[]
+    # for booking in user_bookings:
+    #     venue_id = booking.venue_id
+    #     show_id = booking.show_id
+    #     forVenue.append(Venue.query.filter_by(id=venue_id))
+    #     forShow.append(Show.query.filter_by(id=show_id))
+    #     shows = user_hist_rating.query.filter_by(venue_id=venue_id,show_id=show_id)
+    #     ratings=[]
+    #     for show in shows: 
+    #         ratings.append(show.user_rating) 
+    #     booking.rating = sum(ratings)/len(ratings)
+    return render_template('admin-user_bookings.html',user_bookings=user_bookings,shows=shows,venues=venues)#,forVenue=forVenue,forShow=forShow

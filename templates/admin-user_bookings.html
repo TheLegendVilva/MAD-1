@@ -25,10 +25,10 @@
       <tr style="color: gold; text-transform: uppercase;">
         <td>{{ show.u_id }}</td>
         <td>{{ show.show_id }}</td>
-        <td>{{ forShow[user_bookings.index(show)].name }}</td>
+        <td>{{ shows[show.show_id] }}</td>
         <td>{{ show.venue_id }}</td>
-        <td>{{ forVenue[user_bookings.index(show)].name }}</td>
-        <td>{{ show.rating }}</td>
+        <td>{{venues[show.venue_id] }}</td>
+        <td>{{ show.user_rating }}</td>
       </tr>
       {% endfor %}
     </tbody>

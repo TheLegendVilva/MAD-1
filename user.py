@@ -108,7 +108,10 @@ def rating(u_id,show_id,venue_id):
         try:
             db.session.commit()
             history = user_hist_rating.query.filter_by(u_id=u_id)
-            shows = Show.query.all()
+            shows={}
+            if(len(list(history))>0):
+                for h in history:
+                    shows[h.show_id] = Show.query.get_or_404(h.show_id).name
             return render_template('user_history.html',history=history,shows=shows,form=form)
         except:
             db.session.rollback()
@@ -128,8 +131,11 @@ def user_navbar():
 def user_history():
     form=RatingForm()
     u_id = current_user.id
-    # return render_template("dummy.html" , uid=uid)
     history = user_hist_rating.query.filter_by(u_id=u_id)
-    shows = Show.query.all()
-    # return render_template(history=history)
+    
+    shows={}
+    if(len(list(history))>0):
+        for h in history:
+            shows[h.show_id] = Show.query.get_or_404(h.show_id).name
     return render_template('user_history.html',history=history,shows=shows,form=form)
+    

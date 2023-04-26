@@ -7,6 +7,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 {% endfor %}
+
 <body style="background: black">  
   <table class="table table-bordered border-primary">
     <thead>
@@ -22,11 +23,12 @@
       <tr style="text-transform: uppercase;">  
         <td  style="color: gold;">{{ h.show_id }}</td>
         <td  style="color: gold;" >
-        {% for show in shows %}
+        <!-- {% for show in shows %}
           {% if show.id == h.show_id %}
             {{ show.name }}
           {% endif %}
-        {% endfor %}
+        {% endfor %} -->
+        {{ shows[h.show_id] }}
         </td>
         <td  style="color: gold;text-transform: uppercase;">{{ h.user_rating }}</td>
         <td><a href="{{ url_for('rating',u_id=h.u_id,show_id=h.show_id,venue_id=h.venue_id) }}"><button type="button" class="btn btn-info">Ratings</button></a></td>

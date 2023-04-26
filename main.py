@@ -52,7 +52,7 @@ def get_hist():
     hists = user_hist_rating.query.all()
     hist_list = []
     for hist in hists:
-        item = {'u_id': hist.u_id, 'show_id': hist.show_id, 'user_rating': hist.user_rating,'venue_id': hist.venue_id, 'average_rating':hist.average_rating}
+        item = {'u_id': hist.u_id, 'show_id': hist.show_id, 'user_rating': hist.user_rating,'venue_id': hist.venue_id}
         hist_list.append(item)
     return jsonify(hist_list)
 
