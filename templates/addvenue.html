@@ -40,7 +40,7 @@
     </tbody>
   </table>
  <form method="POST">
-    <input type="hidden" name="{{ form.hidden_tag() }}" />
+    <input type="hidden" name="{{ form.hidden_tag() }}" >
     <label for="{{ form.name.id }}" class="form-label">{{ form.name.label.text }}</label>
     <input type="text" name="{{ form.name.name }}" id="{{ form.name.id }}" class="form-control" />
     <br />
@@ -61,8 +61,8 @@
   <div class="login-box" style="margin-top: 50px;">
   <form method="POST">
     <div class="user-box">
-      <input type="hidden" name="{{ form.hidden_tag() }}">
-    <label for="name" class="form-label">ADD NAME</label>
+      <!-- <input type="hidden" name="{{ form.hidden_tag() }}"> -->
+    <label for="name" class="form-label" style="margin-top: -34px">ADD NAME</label>
     <input type="text" name="name" id="name" class="form-control">
     
     </div>

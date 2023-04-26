@@ -1,27 +1,28 @@
 {% extends 'baseuser.html' %}
 {% block content %}
-<div class="card" style="width: 1000px;">
+<body style="background: black;">
+<div class="card" style="width: 1000px;background: black;">
     <div class="card-body">
       <div class="overflow-y: scroll;"> 
      <ul class="list-group list-group-flush">  
  {% for venue in venues %}
  
- <div class="d-flex p-2" style="width: 18rem;">
-    <div class="card-body">
+ <div class="d-flex p-2" style="width: 18rem; background: black;">
+    <div class="card-body" style="background: black; ">
      <!-- <div class="overflow-y: scroll;"> -->
      <!-- <ul class="list-group list-group-flush">   -->
-        <h5 class="card-title">Venue: {{ venue.name }}</h5><!-- 
+        <h5 class="card-title" style="color: GOLD">Venue: {{ venue.name }}</h5><!-- 
        <li class="list-group-item">Venue: {{ venue.name }}</li> -->
        </div>
        {% for show in venue.shows %}
            <!-- {% if show.venue_id == venue.id %} -->
-           <div class='d-flex bg-secondary'>
-            <div class=" card" style="width: 18rem;">
-               <div class="card-body">
-             <ul class="list-group list-group-flush">
-             <li class="list-group-item">Show name: {{ show.name }}</li>
-             <li class="list-group-item">Show Timing: {{ show.show_timing }}</li>
-             <li class="list-group-item">Show Capacity: {{ show.available_seats }}</li>
+           <div class='d-flex bg-secondary' style="background: black;">
+            <div class=" card" style="width: 18rem;background: black;">
+               <div class="card-body" style="background: black;">
+             <ul class="list-group list-group-flush" >
+             <li class="list-group-item" style="color: gold; background: black;">Show name: {{ show.name }}</li>
+             <li class="list-group-item" style="color: gold; background: black;">Show Timing: {{ show.show_timing }}</li>
+             <li class="list-group-item" style="color: gold;background: black;">Show Capacity: {{ show.available_seats }}</li>
              </ul>
              <div class="card-body">
    <a href="{{ url_for('booking',show_id=show.id,venue_id=venue.id) }}"><button type="button" class="btn btn-info">Book Tickets</button></a>

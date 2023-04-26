@@ -31,13 +31,13 @@
   </table>
  
 {% else %}
-  <h1 style="color:blue">Update venue</h1>
+
   <!-- <div class="card" style="text-align: center; width: 400px;">
   <div class="card-body">
   <div class="shadow p-3 mb-5 bg-body rounded"> -->
     <!-- <form action="{{ url_for('updatevenue',id=venue_to_update.id) }}" method="POST"> -->
-    <form action="{{ url_for('updatevenue',id=venue_to_update.id) }}" method="POST">
-      <div class="login-box" style="margin-top: 20px;">
+    <form action="{{ url_for('updatevenue',id=venue_to_update.id) }}" method="POST" style="margin-top: 10px">
+      <div class="login-box" style="margin-top: 100px;">
 
         <div class="user-box">  
         {{ form.hidden_tag() }}
@@ -56,8 +56,7 @@
         {{ form.capacity.label(class="form-label") }}
         {{ form.capacity(class="form-control", value=venue_to_update.Capacity)}}<!-- String input field name-->
       </br></br>
-      <button class='btn'>
-      {{ form.submit(class="btn btn-dark") }}
+      <button type="submit" class="btn btn-dark">Submit</button>
       </br>
 </form>
   <!-- </div> 

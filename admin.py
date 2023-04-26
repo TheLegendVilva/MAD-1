@@ -95,11 +95,11 @@ def updatevenue(id):
             db.session.commit()
             venues = Venue.query.order_by(Venue.date_added)
             return render_template('viewVenues.html',venues=venues)
+            # return render_template("dummy.html")
         except:
+            db.session.rollback()
             flash('Error')
-            return render_template("updatevenue.html", form=form, venue_to_update=venue_to_update)
-        finally:
-            flash('Error')
+            # return render_template("dummy.html")
             return render_template("updatevenue.html", form=form, venue_to_update=venue_to_update)
     else:
         # return render_template('dummy.html')
@@ -211,13 +211,13 @@ def deleteshow(id):
     
 @app.route('/user_bookings',methods=['POST','GET'])
 @login_required
-def user_bookings():
+def user_bookings():    
     user_bookings = user_hist_rating.query.all()
-    shows={}
+    shows={}    
     if(len(list(user_bookings))>0):
         for h in user_bookings:
             shows[h.show_id] = Show.query.get_or_404(h.show_id).name
-    venues={}
+    venues={}   
     if(len(list(user_bookings))>0):
         for h in user_bookings:
             venues[h.show_id] = Venue.query.get_or_404(h.venue_id).name
