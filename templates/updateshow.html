@@ -41,14 +41,15 @@
   </table>
  
 {% else %}
-
+</br>
   <form action="{{ url_for('updateshow',id=show_to_update.id) }}" method="POST" >
-    <div class="login-box" style="margin-top: 200px;">
+  </br>
+    <div class="login-box" style="margin-top: 175px;">
       
-      <div class="user-box">
+      <div class="user-box" style="margin-top: 34px">
     
 
-  <input type="hidden" name="{{ form.hidden_tag() }}">
+  <!-- <input type="hidden" name="{{ form.hidden_tag() }}"> -->
   <label for="show_name" class="form-label" style="margin-top: -34px">Show Name</label>
   <input type="text" name="show_name" id="show_name" class="form-control" value="{{ show_to_update.name }}">
   </div>

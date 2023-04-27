@@ -1,18 +1,31 @@
 from flask import Flask, render_template,jsonify
+from flask_login import login_user,login_required, logout_user,  LoginManager
 from flask_bcrypt import Bcrypt
 from database import app,Venue,Show,Users,Admin,user_hist_rating
 from user import user_login
 from admin import adminLogin
 from flask_migrate import Migrate
+
+adminlogin_manager = LoginManager()
+adminlogin_manager.init_app(app)
+adminlogin_manager.login_view = 'adminLogin'
+@adminlogin_manager.user_loader
+
+def load_user(admin_id):
+    return Admin.query.filter_by(id=int(admin_id)).first() 
+
 if __name__=="__main__":
     app.debug=True
     app.run(threaded=True)
+
+
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
     return render_template('home.html')
 
 @app.route('/venueDB/',methods=['GET'])
+@login_required
 def get_venues():
     venues = Venue.query.all()
     venue_list = []
@@ -22,6 +35,7 @@ def get_venues():
     return jsonify(venue_list)
 
 @app.route('/showDB/',methods=['GET'])
+@login_required
 def get_shows():
     shows = Show.query.all()
     show_list = []
@@ -31,6 +45,7 @@ def get_shows():
     return jsonify(show_list)
 
 @app.route('/usersDB/',methods=['GET','POST'])
+@login_required
 def get_users():
     users = Users.query.all()
     users_list = []
@@ -40,6 +55,7 @@ def get_users():
     return jsonify(users_list)
 
 @app.route('/adminDB/',methods=['GET','POST'])
+@login_required
 def get_admins():
     admins = Admin.query.all()
     admins_list = []
@@ -49,6 +65,7 @@ def get_admins():
     return jsonify(admins_list)
 
 @app.route('/user_histDB/',methods=['GET','POST'])
+@login_required
 def get_hist():
     hists = user_hist_rating.query.all()
     hist_list = []
